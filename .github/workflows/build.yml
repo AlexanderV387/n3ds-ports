@@ -12,10 +12,22 @@ jobs:
       - uses: actions/checkout@v5
 
       - name: Instalar SDL2 para 3DS
-        # La imagen trae la base de datos de paquetes sin sincronizar (-y).
+        # Si devkitPro no ofrece un paquete de SDL2 para 3DS, se compila SDL2
+        # desde el código oficial, que soporta 3DS desde la versión 2.24.
         run: |
-          dkp-pacman -Q 3ds-sdl2 || dkp-pacman -Sy --noconfirm --needed 3ds-sdl2
-          ls "$DEVKITPRO/portlibs/3ds/lib/cmake"
+          dkp-pacman -Sy
+          echo "Paquetes SDL disponibles:"; dkp-pacman -Slq | grep -i sdl || true
+          if dkp-pacman -Si 3ds-sdl2 >/dev/null 2>&1; then
+            dkp-pacman -S --noconfirm --needed 3ds-sdl2
+          else
+            git clone --depth 1 --branch release-2.30.9 https://github.com/libsdl-org/SDL.git /tmp/SDL
+            cmake -S /tmp/SDL -B /tmp/SDL/build \
+              -DCMAKE_TOOLCHAIN_FILE="$DEVKITPRO/cmake/3DS.cmake" \
+              -DCMAKE_BUILD_TYPE=Release \
+              -DCMAKE_INSTALL_PREFIX="$DEVKITPRO/portlibs/3ds"
+            cmake --build /tmp/SDL/build -j"$(nproc)"
+            cmake --install /tmp/SDL/build
+          fi
 
       - name: Compilar
         working-directory: hello-world

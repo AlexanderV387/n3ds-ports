@@ -33,7 +33,8 @@ hello-world/        primer programa: toolchain, bucle principal, entrada y FPS
 Hace falta [devkitPro](https://devkitpro.org/wiki/Getting_Started) con devkitARM, libctru y SDL2 para 3DS:
 
 ```sh
-dkp-pacman -S 3ds-dev 3ds-sdl2
+dkp-pacman -S 3ds-dev
+dkp-pacman -Ss sdl   # buscar el paquete de SDL2 para 3DS; si no hay, ver .github/workflows/build.yml
 cd hello-world
 cmake -B build -DCMAKE_TOOLCHAIN_FILE="$DEVKITPRO/cmake/3DS.cmake"
 cmake --build build
