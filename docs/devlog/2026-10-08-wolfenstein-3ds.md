@@ -38,8 +38,11 @@ Corre fluido en la New 3DS. El estándar de controles quedó en [`controles-fps.
 
 Port dado por terminado el 8 de octubre de 2026, con todo probado en New 3DS: doble stick, giro con la pantalla táctil (con velocidad propia), tres modos de correr, botones reasignables, HUD abajo con posición configurable, HOME y salida segura del menú.
 
+## Release
+
+Publicado como [v1.0.0](https://github.com/AlexanderV387/wolf4sdl-3ds/releases/tag/v1.0.0) con los 8 archivos (`.cia` y `.3dsx` de las cuatro versiones). Para publicar otra versión: cambiar `VERSION` y hacer un commit con `[release]` en el mensaje; GitHub crea la etiqueta (desde este entorno no se pueden subir etiquetas).
+
 ## Pendiente
 
-- Publicar un *release* con los `.cia` (los artefactos de Actions caducan en enero de 2027).
 - Probar Spear of Destiny y el shareware (solo se probó Wolfenstein completo).
 - Siguiente port: Chocolate Doom (Doom, Heretic, Hexen), con este mismo estándar de controles.
