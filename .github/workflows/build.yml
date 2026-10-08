@@ -72,10 +72,17 @@ jobs:
           for z in dl-makerom/*.zip; do unzip -o "$z" -d dl-makerom; done
           find dl-makerom -type f -name makerom -exec install -m755 {} tools-bin/ \;
 
-          gh release view -R Steveice10/bannertool --json tagName,assets --jq '.tagName, .assets[].name'
-          gh release download -R Steveice10/bannertool --pattern '*.zip' --dir dl-bannertool
-          for z in dl-bannertool/*.zip; do unzip -o "$z" -d dl-bannertool; done
-          find dl-bannertool -type f -name bannertool -path '*linux*' -path '*x86_64*' -exec install -m755 {} tools-bin/ \;
+          # Steveice10/bannertool ya no publica releases. Se usa el fork de
+          # diasurgical (DevilutionX); si no hay binario, se compila del código.
+          if gh release download -R diasurgical/bannertool --pattern '*.zip' --dir dl-bannertool; then
+            for z in dl-bannertool/*.zip; do unzip -o "$z" -d dl-bannertool; done
+            find dl-bannertool -type f -name bannertool -path '*linux*' -path '*x86_64*' -exec install -m755 {} tools-bin/ \;
+          fi
+          if [ ! -x tools-bin/bannertool ]; then
+            git clone --recursive --depth 1 https://github.com/Steveice10/bannertool src-bannertool
+            make -C src-bannertool
+            find src-bannertool/output -type f -name bannertool -exec install -m755 {} tools-bin/ \;
+          fi
 
           ls -la tools-bin
           echo "$PWD/tools-bin" >> "$GITHUB_PATH"
