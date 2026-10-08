@@ -9,6 +9,7 @@ El objetivo es aprender C/C++, render y optimización con poca RAM, y dejar trab
 | Proyecto | Repo | Estado |
 |---|---|---|
 | Hola mundo (devkitPro + SDL2) | [`hello-world/`](hello-world/) | Funciona en New 3DS: 59,8 FPS estables con vsync |
+| Wolfenstein 3D y Spear of Destiny | [wolf4sdl-3ds](https://github.com/AlexanderV387/wolf4sdl-3ds) (rama `n3ds`) | Corre fluido en New 3DS; controles nuevos en prueba |
 | Chocolate Doom (Doom, Heretic, Hexen) | Fork propio, pendiente | No iniciado |
 | Motor compatible con MUGEN | Pendiente | Largo plazo |
 
@@ -24,6 +25,7 @@ docs/
   catalogo.md       candidatos por nivel y qué ya existe
   rendimiento.md    mediciones en hardware real, antes y después
   aprendizaje.md    plan de aprendizaje y cómo comprobar cada paso
+  controles-fps.md  estándar de controles para todos los FPS del proyecto
   devlog/           una entrada por avance importante
 hello-world/        primer programa: toolchain, bucle principal, entrada y FPS
 tools/3ds/          empaquetado .cia reutilizable para todos los ports
