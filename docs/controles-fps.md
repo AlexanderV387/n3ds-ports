@@ -9,9 +9,9 @@ Lo que definimos al portar Wolfenstein 3D (wolf4sdl-3ds, rama `n3ds`) y que se a
 | A | Aceptar |
 | B | Volver |
 | START | Salir del menú de una vez y volver al juego (o al título) |
+| Cruceta / Circle Pad | Moverse por el menú |
 
 - Salir del juego solo con la opción "Quit". B en el menú principal vuelve al juego durante una partida y no hace nada en el título: un B + A accidental cerraba el juego y se perdía el progreso.
-| Cruceta / Circle Pad | Moverse por el menú |
 
 - Leer los botones directo con libctru (`hidKeysHeld`), no a través de SDL. SDL 1.2 para 3DS numera START como botón 0 y A como botón 1, y eso invierte aceptar y volver.
 - Al abrir y al cerrar el menú, esperar a que se suelte START; si no, el mismo toque lo vuelve a abrir o cerrar.
@@ -46,21 +46,21 @@ Aplica igual al Circle Pad y a la cruceta.
 - START y la cruceta no se reasignan: START es el menú, la cruceta mueve.
 - El menú muestra nombres de botones de 3DS, nunca teclas de PC, mouse ni joystick.
 
-Predeterminados de Wolfenstein:
+Predeterminados de Wolfenstein (R dispara, como en la mayoría de los FPS):
 
 | Botón | Acción |
 |---|---|
-| A, ZR | Disparar |
-| B | Usar / abrir |
-| X | Strafe |
-| Y, ZL | Correr |
-| L / R | Arma anterior / siguiente |
+| R, ZR | Disparar |
+| A | Usar / abrir |
+| B, ZL | Correr |
+| X / Y | Arma siguiente / anterior |
+| L | Strafe |
 | SELECT | Pausa |
 
 ## Pantallas
 
 - Pantalla de arriba: el juego.
-- Pantalla de abajo: el HUD (vida, munición, cara, llaves) cuando el juego está a pantalla completa. *(Pendiente en Wolfenstein.)*
+- Pantalla de abajo: el HUD (vida, munición, cara, llaves) cuando el juego está a pantalla completa. En Wolfenstein se dibuja cada cuadro con las funciones originales de la barra de estado en una superficie aparte.
 - Un toque en la pantalla táctil apaga o enciende la de abajo (ahorra batería), en cualquier momento: título, menús y juego. Con el HUD visible el toque no la apaga, y si estaba apagada se enciende sola al aparecer el HUD.
 - **Abrir `gsp::Lcd` solo alrededor de cada cambio de brillo** (`gspLcdInit` → `GSPLCD_PowerOn/OffBacklight` → `gspLcdExit`). Dejar la sesión abierta todo el juego congeló la consola al presionar HOME en Wolfenstein: el menú HOME necesita ese mismo servicio.
 - Con `aptHook`, encender la pantalla de abajo al ir a HOME, al dormir y al salir, y volver a apagarla al regresar si estaba apagada. También con `atexit`.
