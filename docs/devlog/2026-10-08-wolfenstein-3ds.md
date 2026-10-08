@@ -25,6 +25,7 @@ Corre fluido en la New 3DS. El estándar de controles quedó en [`controles-fps.
 | HOME congelaba la consola | La sesión de `gsp::Lcd` quedaba abierta todo el juego | Abrirla solo para cada cambio de brillo |
 | B + A cerraba el juego | B en el menú principal abría "salir" | Solo "Quit" sale; B vuelve al juego |
 | HUD congelado abajo | La partida mostraba cada cuadro por otro camino que no actualizaba la pantalla de abajo | Todos los cuadros pasan por `N3DS_Flip` |
+| Girar con el táctil era lentísimo | El tope de giro por cuadro (pensado para teclas y sticks) cortaba los deslizamientos rápidos | Sumar el giro táctil después del tope, con su propia velocidad (1-10) |
 
 ## Qué aprendí
 
@@ -33,8 +34,12 @@ Corre fluido en la New 3DS. El estándar de controles quedó en [`controles-fps.
 - Probar con alguien que juega de verdad encuentra cosas que el código no muestra, como la velocidad del stick o el B + A accidental.
 - Los servicios del sistema de la 3DS se comparten con el menú HOME: no hay que dejarlos abiertos.
 
+## Estado final
+
+Port dado por terminado el 8 de octubre de 2026, con todo probado en New 3DS: doble stick, giro con la pantalla táctil (con velocidad propia), tres modos de correr, botones reasignables, HUD abajo con posición configurable, HOME y salida segura del menú.
+
 ## Pendiente
 
-- Opción para girar con la pantalla táctil (3DS sin C-stick).
-- Publicar un *release* con los `.cia`.
+- Publicar un *release* con los `.cia` (los artefactos de Actions caducan en enero de 2027).
+- Probar Spear of Destiny y el shareware (solo se probó Wolfenstein completo).
 - Siguiente port: Chocolate Doom (Doom, Heretic, Hexen), con este mismo estándar de controles.

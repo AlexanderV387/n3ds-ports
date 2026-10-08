@@ -22,6 +22,7 @@ Lo que definimos al portar Wolfenstein 3D (wolf4sdl-3ds, rama `n3ds`) y que se a
 - Circle Pad: avanzar/retroceder y moverse de lado (*strafe*).
 - C-stick: girar la cámara.
 - Modo clásico opcional: el Circle Pad avanza y gira, como el original.
+- Giro con la pantalla táctil (opcional, para 3DS sin C-stick): deslizar a izquierda o derecha gira, con su propia velocidad (1-10). Se suma **después** del tope de giro por cuadro del motor: ese tope es para teclas y sticks y cortaba los deslizamientos rápidos. Con esta opción activa, el toque no apaga la pantalla de abajo durante la partida.
 
 **Velocidad analógica:**
 - La inclinación del stick es proporcional: a medio camino, más lento.
@@ -70,7 +71,7 @@ Predeterminados de Wolfenstein (R dispara, como en la mayoría de los FPS):
 
 ## Configuración guardada
 
-- Asignaciones, doble stick, modo de correr y posición del HUD se guardan en el archivo de configuración del juego.
+- Asignaciones, doble stick, modo de correr, posición del HUD y giro táctil (con su velocidad) se guardan en el archivo de configuración del juego.
 - Se agregan al final del formato original, detrás de un número mágico (`0x3d50` en Wolfenstein), para que los archivos de configuración viejos sigan cargando.
 - Validar al leer: valores fuera de rango vuelven al predeterminado.
 
