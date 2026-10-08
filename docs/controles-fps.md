@@ -60,7 +60,8 @@ Predeterminados de Wolfenstein (R dispara, como en la mayoría de los FPS):
 ## Pantallas
 
 - Pantalla de arriba: el juego.
-- Pantalla de abajo: el HUD (vida, munición, cara, llaves) cuando el juego está a pantalla completa. En Wolfenstein se dibuja cada cuadro con las funciones originales de la barra de estado en una superficie aparte.
+- Pantalla de abajo: el HUD (vida, munición, cara, llaves) cuando el juego está a pantalla completa, con posición configurable (arriba, en medio o abajo de la pantalla inferior; abajo por defecto). En Wolfenstein se dibuja cada cuadro con las funciones originales de la barra de estado en una superficie aparte.
+- Todos los caminos que muestran un cuadro deben actualizar la pantalla de abajo (en Wolfenstein, `N3DS_Flip` en lugar de `SDL_Flip`). La partida usaba su propio blit + flip y el HUD se quedaba congelado.
 - Un toque en la pantalla táctil apaga o enciende la de abajo (ahorra batería), en cualquier momento: título, menús y juego. Con el HUD visible el toque no la apaga, y si estaba apagada se enciende sola al aparecer el HUD.
 - **Abrir `gsp::Lcd` solo alrededor de cada cambio de brillo** (`gspLcdInit` → `GSPLCD_PowerOn/OffBacklight` → `gspLcdExit`). Dejar la sesión abierta todo el juego congeló la consola al presionar HOME en Wolfenstein: el menú HOME necesita ese mismo servicio.
 - Con `aptHook`, encender la pantalla de abajo al ir a HOME, al dormir y al salir, y volver a apagarla al regresar si estaba apagada. También con `atexit`.
@@ -69,7 +70,7 @@ Predeterminados de Wolfenstein (R dispara, como en la mayoría de los FPS):
 
 ## Configuración guardada
 
-- Asignaciones, doble stick y modo de correr se guardan en el archivo de configuración del juego.
+- Asignaciones, doble stick, modo de correr y posición del HUD se guardan en el archivo de configuración del juego.
 - Se agregan al final del formato original, detrás de un número mágico (`0x3d50` en Wolfenstein), para que los archivos de configuración viejos sigan cargando.
 - Validar al leer: valores fuera de rango vuelven al predeterminado.
 
