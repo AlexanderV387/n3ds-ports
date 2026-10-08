@@ -10,6 +10,9 @@
  */
 #include <SDL2/SDL.h>
 #include <stdio.h>
+#ifdef __3DS__
+#include <3ds.h>
+#endif
 
 #define SCREEN_W 400
 #define SCREEN_H 240
@@ -113,6 +116,11 @@ int main(int argc, char *argv[])
         draw_text(renderer, ms_text, 8, 8 + 7 * PIXEL); /* ms por cuadro */
 
         SDL_RenderPresent(renderer);
+#ifdef __3DS__
+        /* SDL2 para 3DS ignora SDL_RENDERER_PRESENTVSYNC: sin esto el bucle
+         * corría a ~108 FPS en una New 3DS. Se espera el refresco a mano. */
+        gspWaitForVBlank();
+#endif
 
         frames++;
         Uint64 now = SDL_GetPerformanceCounter();

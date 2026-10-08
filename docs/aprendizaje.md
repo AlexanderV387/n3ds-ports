@@ -30,7 +30,7 @@ Cada paso deja una habilidad concreta y una forma de comprobarla.
 
 Responderlas en el devlog antes de pasar a Chocolate Doom:
 
-1. ¿Qué hace `SDL_RENDERER_PRESENTVSYNC` y por qué el contador se queda en unos 60 FPS?
+1. ¿Qué hace `SDL_RENDERER_PRESENTVSYNC`? ¿Por qué en la primera prueba el contador marcaba ~108 FPS y qué cambió `gspWaitForVBlank()`?
 2. ¿Por qué el FPS se promedia cada medio segundo en lugar de calcularse en cada cuadro?
 3. ¿Qué pasa si quitas la zona muerta del Circle Pad?
 4. ¿Cómo se dibuja un número con la fuente de 3x5 bits? Explica la operación `4 >> col`.
