@@ -39,3 +39,55 @@ jobs:
         with:
           name: hello_n3ds
           path: hello-world/build/*.3dsx
+
+      # El .elf se pasa al trabajo que genera el .cia.
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hello_n3ds_elf
+          path: hello-world/build/hello_n3ds.elf
+
+  hello-world-cia:
+    needs: hello-world
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: hello_n3ds_elf
+
+      - name: Instalar makerom y bannertool
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p tools-bin dl-makerom dl-bannertool
+
+          # Project_CTR publica makerom y ctrtool por separado: se toma el
+          # release más reciente cuya etiqueta empiece por "makerom".
+          tag=$(gh release list -R 3DSGuy/Project_CTR --limit 50 --json tagName --jq '.[].tagName' | grep '^makerom' | head -1)
+          echo "makerom: $tag"
+          gh release view "$tag" -R 3DSGuy/Project_CTR --json assets --jq '.assets[].name'
+          gh release download "$tag" -R 3DSGuy/Project_CTR --pattern '*ubuntu*' --dir dl-makerom \
+            || gh release download "$tag" -R 3DSGuy/Project_CTR --pattern '*linux*' --dir dl-makerom
+          for z in dl-makerom/*.zip; do unzip -o "$z" -d dl-makerom; done
+          find dl-makerom -type f -name makerom -exec install -m755 {} tools-bin/ \;
+
+          gh release view -R Steveice10/bannertool --json tagName,assets --jq '.tagName, .assets[].name'
+          gh release download -R Steveice10/bannertool --pattern '*.zip' --dir dl-bannertool
+          for z in dl-bannertool/*.zip; do unzip -o "$z" -d dl-bannertool; done
+          find dl-bannertool -type f -name bannertool -path '*linux*' -path '*x86_64*' -exec install -m755 {} tools-bin/ \;
+
+          ls -la tools-bin
+          echo "$PWD/tools-bin" >> "$GITHUB_PATH"
+
+      - name: Generar .cia
+        run: |
+          tools/3ds/make-cia.sh hello_n3ds.elf hello_n3ds.cia \
+            "Hello n3ds" "Hola mundo de n3ds-ports" "AlexanderV387" \
+            0xF3D50 CTR-H-N3HW \
+            hello-world/assets/icon.png hello-world/assets/banner.png hello-world/assets/banner.wav
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hello_n3ds_cia
+          path: hello_n3ds.cia
