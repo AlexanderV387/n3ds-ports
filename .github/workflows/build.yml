@@ -9,10 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     container: devkitpro/devkitarm:latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Instalar SDL2 para 3DS
-        run: dkp-pacman -S --noconfirm --needed 3ds-sdl2
+        # La imagen trae la base de datos de paquetes sin sincronizar (-y).
+        run: |
+          dkp-pacman -Q 3ds-sdl2 || dkp-pacman -Sy --noconfirm --needed 3ds-sdl2
+          ls "$DEVKITPRO/portlibs/3ds/lib/cmake"
 
       - name: Compilar
         working-directory: hello-world
