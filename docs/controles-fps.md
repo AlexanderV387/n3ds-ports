@@ -9,6 +9,8 @@ Lo que definimos al portar Wolfenstein 3D (wolf4sdl-3ds, rama `n3ds`) y que se a
 | A | Aceptar |
 | B | Volver |
 | START | Salir del menú de una vez y volver al juego (o al título) |
+
+- Salir del juego solo con la opción "Quit". B en el menú principal vuelve al juego durante una partida y no hace nada en el título: un B + A accidental cerraba el juego y se perdía el progreso.
 | Cruceta / Circle Pad | Moverse por el menú |
 
 - Leer los botones directo con libctru (`hidKeysHeld`), no a través de SDL. SDL 1.2 para 3DS numera START como botón 0 y A como botón 1, y eso invierte aceptar y volver.
@@ -59,7 +61,10 @@ Predeterminados de Wolfenstein:
 
 - Pantalla de arriba: el juego.
 - Pantalla de abajo: el HUD (vida, munición, cara, llaves) cuando el juego está a pantalla completa. *(Pendiente en Wolfenstein.)*
-- Un toque en la pantalla táctil apaga o enciende la de abajo (oculta la consola de texto y ahorra batería). Al salir del juego se enciende siempre (`atexit`), para no dejar el menú HOME a oscuras.
+- Un toque en la pantalla táctil apaga o enciende la de abajo (ahorra batería), en cualquier momento: título, menús y juego. Con el HUD visible el toque no la apaga, y si estaba apagada se enciende sola al aparecer el HUD.
+- **Abrir `gsp::Lcd` solo alrededor de cada cambio de brillo** (`gspLcdInit` → `GSPLCD_PowerOn/OffBacklight` → `gspLcdExit`). Dejar la sesión abierta todo el juego congeló la consola al presionar HOME en Wolfenstein: el menú HOME necesita ese mismo servicio.
+- Con `aptHook`, encender la pantalla de abajo al ir a HOME, al dormir y al salir, y volver a apagarla al regresar si estaba apagada. También con `atexit`.
+- En SDL 1.2 para 3DS, `SDL_DUALSCR` con una superficie de 400×480 da las dos pantallas: filas 0-239 arriba y 240-479 abajo (se ven las columnas 40-359, 1:1). Sin consola de texto: `consoleDebugInit(debugDevice_NULL)`.
 - Quitar pantallas de PC sin sentido en la consola, como la verificación de memoria de DOS.
 
 ## Configuración guardada
