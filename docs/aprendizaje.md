@@ -4,7 +4,7 @@ Cada paso deja una habilidad concreta y una forma de comprobarla.
 
 | Paso | Qué se aprende | Cómo comprobarlo | Hecho |
 |---|---|---|---|
-| Hola mundo con devkitPro y SDL2 | Toolchain, bucle principal, entrada | Corre en la consola y muestra los FPS | [ ] |
+| Hola mundo con devkitPro y SDL2 | Toolchain, bucle principal, entrada | Corre en la consola y muestra los FPS | [x] |
 | Chocolate Doom en 3DS | C, arquitectura de un motor clásico, render por columnas | FPS antes y después; demos que se reproducen igual | [ ] |
 | Controles y pantalla táctil | Entrada e interfaz | Mapeo documentado y probado en hardware | [ ] |
 | Render multihilo | Concurrencia y perfilado | ms por cuadro antes y después de cada cambio | [ ] |

@@ -10,4 +10,4 @@ Cómo medir:
 | Fecha | Proyecto | Commit | Escena | Cambio | FPS antes | FPS después | ms/cuadro antes | ms/cuadro después | Por qué cambió |
 |---|---|---|---|---|---|---|---|---|---|
 | 2026-10-08 | hello-world | e0e67ff | Cuadro rojo, pantalla de arriba | Primera medición (Luma 13.4) | — | 108,1 | — | 9,25 | Línea base. SDL2 ignora `SDL_RENDERER_PRESENTVSYNC` en 3DS, así que el bucle no se limita a 60 |
-| 2026-10-08 | hello-world | (pendiente) | Cuadro rojo, pantalla de arriba | `gspWaitForVBlank()` tras cada cuadro | 108,1 | | 9,25 | | Esperar el refresco de pantalla debería fijar ~60 FPS |
+| 2026-10-08 | hello-world | b6b1bd3 | Cuadro rojo, pantalla de arriba | `gspWaitForVBlank()` tras cada cuadro | 108,1 | 59,8 (estable) | 9,25 | 16,71 (estable) | El bucle espera el refresco de pantalla; desaparece el tearing |

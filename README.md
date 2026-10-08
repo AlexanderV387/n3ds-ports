@@ -8,7 +8,7 @@ El objetivo es aprender C/C++, render y optimización con poca RAM, y dejar trab
 
 | Proyecto | Repo | Estado |
 |---|---|---|
-| Hola mundo (devkitPro + SDL2) | [`hello-world/`](hello-world/) | Código listo; falta probarlo en una New 3DS |
+| Hola mundo (devkitPro + SDL2) | [`hello-world/`](hello-world/) | Funciona en New 3DS: 59,8 FPS estables con vsync |
 | Chocolate Doom (Doom, Heretic, Hexen) | Fork propio, pendiente | No iniciado |
 | Motor compatible con MUGEN | Pendiente | Largo plazo |
 
