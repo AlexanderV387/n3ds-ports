@@ -42,7 +42,12 @@ Port dado por terminado el 8 de octubre de 2026, con todo probado en New 3DS: do
 
 Publicado como [v1.0.0](https://github.com/AlexanderV387/wolf4sdl-3ds/releases/tag/v1.0.0) con los 8 archivos (`.cia` y `.3dsx` de las cuatro versiones). Para publicar otra versión: cambiar `VERSION` y hacer un commit con `[release]` en el mensaje; GitHub crea la etiqueta (desde este entorno no se pueden subir etiquetas).
 
+## v1.1.0 (9 de octubre)
+
+- Selector de misiones de Spear of Destiny: un `.cia` no puede pasar `--mission`, así que las expansiones (`*.sd2`, `*.sd3`) eran inalcanzables. Si la carpeta tiene más de una misión, un menú de texto de libctru en la pantalla de arriba deja elegir antes de que arranque SDL.
+- Aclaración: los archivos `.SOD` son el juego completo; `.SDM` es la demo; `.SD2` y `.SD3` son expansiones que se vendían aparte. Steam trae solo `.SOD`.
+
 ## Pendiente
 
-- Probar Spear of Destiny y el shareware (solo se probó Wolfenstein completo).
-- Siguiente port: Chocolate Doom (Doom, Heretic, Hexen), con este mismo estándar de controles.
+- Probar Spear of Destiny completo y el shareware en hardware.
+- Siguiente: Blake Stone (BStone), mismo motor; después Chocolate Doom.
