@@ -26,8 +26,24 @@ Solución: en la 3DS, los ticks se calculan con el tiempo transcurrido (`steady_
 
 Los botones de la 3DS se agregaron como códigos de tecla (`sc_n3ds_a`…). Así el menú de reasignar de BStone funciona tal cual y la configuración los guarda por nombre (`3ds_r`). En los menús, A también es Enter/Sí y B es Escape/No; en el juego solo son sus propios botones. Circle Pad para avanzar y moverse de lado (con el *strafe* analógico que ya traía BStone) y C-stick para girar.
 
+## En hardware: de no arrancar a 60 FPS
+
+| Problema | Causa | Solución |
+|---|---|---|
+| Volvía al Homebrew Launcher sin mensaje | Error al iniciar y la 3DS no tiene ventanas de mensaje | Mostrar el error en la pantalla de arriba; pila de 1 MB |
+| "Content not found" | newlib declara `F_OFD_SETLK` pero los bloqueos de archivo siempre fallan: no se abría ningún archivo | Bloqueos vacíos en la 3DS |
+| "No relative mode implementation" | SDL no tiene modo relativo del mouse en la 3DS | Omitirlo |
+| Data abort (Alignment) después del título | Cabeceras de las animaciones leídas con casts sobre un búfer de bytes desalineado; GCC usó `ldm/stm` | `memcpy` |
+| Rígido, ~20-30 FPS | El renderizador por software de SDL (escalar, mezclar, rotar) y sin vsync | Componer en una pasada directo al framebuffer y esperar el vsync |
+| 40 FPS con 7 ms de trabajo | El motor dormía hasta su tic de 70 Hz y luego se esperaba el vsync de 60 Hz | Solo el vsync marca el ritmo: **60 FPS** |
+| Cierre de 9 segundos | Los récords se escribían dato por dato a la SD, dos veces | Escribirlos de una vez |
+| Cortes de audio | Hilo de audio en el núcleo del sistema con 30% | Tercer núcleo del New 3DS |
+
+Lo más valioso: medir. Los números en la pantalla de abajo mostraron que el juego casi no costaba nada y que el problema eran esperas, no cálculo.
+
 ## Pendiente
 
-- Probar en hardware: ¿arranca?, ¿FPS? Pisos y techos con textura pesan más que en Wolfenstein.
-- Resto del estándar de controles: HUD abajo, modos de correr, toque en la pantalla de abajo, giro táctil, sensibilidad.
+- Probar el HUD y el mapa en la pantalla de abajo.
+- `.cia` (activar Actions en el fork), arte propio y release.
+- Revisar en Wolfenstein si tiene la misma doble espera (tic + vsync).
 - Arte propio (ícono y banner) y activar Actions en el fork para el `.cia`.

@@ -62,12 +62,21 @@ Predeterminados de Wolfenstein (R dispara, como en la mayoría de los FPS):
 
 - Pantalla de arriba: el juego.
 - Pantalla de abajo: el HUD (vida, munición, cara, llaves) cuando el juego está a pantalla completa, con posición configurable (arriba, en medio o abajo de la pantalla inferior; abajo por defecto). En Wolfenstein se dibuja cada cuadro con las funciones originales de la barra de estado en una superficie aparte.
+- Si el HUD deja espacio libre abajo, un mapa de lo explorado centrado en el jugador (Blake Stone: barra de zona arriba, mapa en medio, barra de estado abajo; la vista 3D ocupa toda la pantalla de arriba).
 - Todos los caminos que muestran un cuadro deben actualizar la pantalla de abajo (en Wolfenstein, `N3DS_Flip` en lugar de `SDL_Flip`). La partida usaba su propio blit + flip y el HUD se quedaba congelado.
 - Un toque en la pantalla táctil apaga o enciende la de abajo (ahorra batería), en cualquier momento: título, menús y juego. Con el HUD visible el toque no la apaga, y si estaba apagada se enciende sola al aparecer el HUD.
 - **Abrir `gsp::Lcd` solo alrededor de cada cambio de brillo** (`gspLcdInit` → `GSPLCD_PowerOn/OffBacklight` → `gspLcdExit`). Dejar la sesión abierta todo el juego congeló la consola al presionar HOME en Wolfenstein: el menú HOME necesita ese mismo servicio.
 - Con `aptHook`, encender la pantalla de abajo al ir a HOME, al dormir y al salir, y volver a apagarla al regresar si estaba apagada. También con `atexit`.
 - En SDL 1.2 para 3DS, `SDL_DUALSCR` con una superficie de 400×480 da las dos pantallas: filas 0-239 arriba y 240-479 abajo (se ven las columnas 40-359, 1:1). Sin consola de texto: `consoleDebugInit(debugDevice_NULL)`.
 - Quitar pantallas de PC sin sentido en la consola, como la verificación de memoria de DOS.
+
+## Rendimiento
+
+- **Objetivo: 60 FPS sin sacrificar calidad; mínimo aceptable, 30.** Se mide en hardware con un contador pequeño en una esquina de la pantalla de abajo (opción, apagado por defecto): cuadros por segundo y milisegundos por cuadro.
+- Medir antes de optimizar: separar el tiempo del dibujo 3D, el de copiar a la pantalla y el resto. En Blake Stone el juego costaba ~7 ms y aun así iba a 40 FPS: el resto era espera.
+- **Una sola espera por cuadro.** Si el motor duerme hasta su propio "tic" (70 Hz en los motores de id) y además se espera el vsync (60 Hz), las dos esperas se desfasan y muchos cuadros pierden un refresco (~40 FPS). En la 3DS el ritmo lo marca el vsync; el motor solo mide el tiempo transcurrido.
+- SDL2 en la 3DS ignora el vsync y su renderizador por software escala, mezcla y rota con la CPU: es mejor componer la imagen y copiarla ya rotada al framebuffer (`gfxGetFramebuffer`), en bloques de 8x8 para aprovechar la caché, y esperar con `gspWaitForVBlank`.
+- El hilo de audio de SDL va al núcleo del sistema con 30% de su tiempo; con música emulada (OPL) se corta. Usar el tercer núcleo del New 3DS, o subir el límite al 80%.
 
 ## Configuración guardada
 
