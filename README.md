@@ -47,6 +47,8 @@ Se genera `build/hello_n3ds.3dsx`. Cópialo a `/3ds/` en la SD y ábrelo desde e
 
 GitHub Actions compila el proyecto en cada push con la imagen oficial `devkitpro/devkitarm` y deja como artefactos descargables el `.3dsx` (para el Homebrew Launcher) y el `.cia` (se instala con FBI y aparece en el menú HOME).
 
+En las sesiones de Claude Code en la nube se compila con [`tools/3ds/build-local.sh`](tools/3ds/build-local.sh), que usa la misma imagen Docker `devkitpro/devkitarm` que GitHub Actions: los servidores de paquetes de devkitPro bloquean esas máquinas (Cloudflare), así que devkitPro no se puede instalar directo.
+
 Para empaquetar cualquier port como `.cia` está [`tools/3ds/make-cia.sh`](tools/3ds/make-cia.sh), que usa makerom, bannertool y la plantilla RSF de [buildtools](https://github.com/Steveice10/buildtools) (MIT). Activa siempre los modos de New 3DS: 804 MHz, caché L2 y 124 MB de RAM.
 
 ## Reglas del proyecto
