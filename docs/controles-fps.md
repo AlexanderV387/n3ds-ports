@@ -86,5 +86,7 @@ Predeterminados de Wolfenstein (R dispara, como en la mayoría de los FPS):
 
 ## Empaquetado
 
+- Un `.cia` arranca **sin argumentos** (`argc` = 0); un `.3dsx` recibe su ruta como `argv[0]`. Si el port agrega opciones a la línea de comandos (por ejemplo, el juego elegido en un menú), primero hay que poner un nombre de programa. En Blake Stone, la opción se perdía y el `.cia` fallaba aunque el `.3dsx` funcionaba: probar siempre los dos.
+
 - `.3dsx` y `.cia` en cada compilación (`tools/3ds/make-cia.sh`), con 804 MHz, caché L2 y 124 MB activados.
 - Datos del juego en `/3ds/<port>/<juego>/`, una carpeta por juego para no mezclar configuraciones ni partidas guardadas.
