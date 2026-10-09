@@ -18,6 +18,7 @@ El objetivo es aprender C/C++, render y optimización con poca RAM, y dejar trab
 ## Plan
 
 1. **Crispy Doom:** Doom 1 y 2, Final Doom, Freedoom, Heretic, Hexen y Strife, con un menú para elegir el juego y los mods (WADs) de una carpeta de la SD. Crispy Doom es Chocolate Doom con pantalla ancha (aprovecha los 400x240 de arriba) y límites ampliados: carga los mods del formato original y los de límites ampliados. Reemplaza al Doom de PrBoom que viene de la DS.
+   - Después del estándar: **dibujo repartido entre dos núcleos** (el tercero del New 3DS), para acercar la alta resolución (800x400 promediada a 400x240, hoy 25-31 ms por cuadro, 30 FPS) a 60 FPS. Opción experimental; la técnica sirve después para Heretic, Hexen, Strife y Woof!.
 2. **Duke Nukem 3D:** ya hay ports (EDuke3D, dn3ds); el nuestro aplicaría el estándar (60 FPS, mapa abajo, controles).
 3. **Motor compatible con MUGEN:** MUGEN es cerrado y Ikemen GO está en Go con OpenGL, así que es otro tipo de proyecto, más grande.
 4. **Largo plazo:**
