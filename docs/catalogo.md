@@ -8,8 +8,8 @@ Investigación del 7 de octubre de 2026; las listas consultadas no son exhaustiv
 
 | Juego | Base posible | Estado |
 |---|---|---|
-| Heretic | Chocolate Doom | Pendiente |
-| Hexen | Chocolate Doom | Pendiente |
+| Doom, Heretic, Hexen, Strife (y mods del formato original) | Crispy Doom | En curso |
+| Mods de Doom en formato Boom/MBF | Woof! | Largo plazo |
 | Doom 64 | Por definir | Pendiente |
 | Dune II | Por definir | Pendiente |
 | Half-Life: Opposing Force y Blue Shift | Xash3DS | Probar primero sobre el port existente |
@@ -31,7 +31,7 @@ Investigación del 7 de octubre de 2026; las listas consultadas no son exhaustiv
 
 ## Nivel 3: retos grandes
 
-Heretic II, Jedi Outcast, Jedi Academy, Return to Castle Wolfenstein, Serious Sam, Brutal Doom Lite, Nanosaur 2, Silent Hill, MediEvil, Driver 2, Blood Omen, Banjo-Kazooie, Diddy Kong Racing y Perfect Dark.
+Heretic II, Jedi Outcast, Jedi Academy, Return to Castle Wolfenstein, Serious Sam, Brutal Doom (necesita un motor de la familia ZDoom), Brutal Doom Lite, Nanosaur 2, Silent Hill, MediEvil, Driver 2, Blood Omen, Banjo-Kazooie, Diddy Kong Racing y Perfect Dark.
 
 ## Nivel 4: largo plazo
 
@@ -62,6 +62,12 @@ Estos juegos ya tienen port, así que no conviene repetirlos salvo para mejorarl
 | Nanosaur 2 | ColemanCDA, en Swift, en desarrollo |
 | OpenBOR | MrHuu, v0.0.6 (2022), cuelgues y carga lenta |
 | Tomb Raider 1 | OpenLara 3DS |
+
+## Descartados
+
+| Juego | Motivo |
+|---|---|
+| Mina the Hollower | Juego comercial nuevo (Yacht Club Games, 2025) sin código abierto ni decompilación: no hay base para portarlo |
 
 ## Riesgo legal por tipo de base
 

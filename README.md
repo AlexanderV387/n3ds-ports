@@ -11,8 +11,21 @@ El objetivo es aprender C/C++, render y optimización con poca RAM, y dejar trab
 | Hola mundo (devkitPro + SDL2) | [`hello-world/`](hello-world/) | Funciona en New 3DS: 59,8 FPS estables con vsync |
 | Wolfenstein 3D y Spear of Destiny | [wolf4sdl-3ds](https://github.com/AlexanderV387/wolf4sdl-3ds) (rama `n3ds`) | Terminado ([v1.4.1](https://github.com/AlexanderV387/wolf4sdl-3ds/releases/tag/v1.4.1)): 60 FPS, doble stick, giro táctil, botones reasignables, HUD y mapa abajo, todos los juegos en un `.cia` con menú |
 | Blake Stone (Aliens of Gold, Planet Strike) | [bstone](https://github.com/AlexanderV387/bstone) (rama `n3ds`) | [v1.0.4](https://github.com/AlexanderV387/bstone/releases/tag/n3ds-v1.0.4): 60 FPS, HUD y mapa abajo, vista 3D a pantalla completa, `.cia` |
-| Chocolate Doom (Doom, Heretic, Hexen) | Fork propio, pendiente | No iniciado |
-| Motor compatible con MUGEN | Pendiente | Largo plazo |
+| Crispy Doom (Doom, Heretic, Hexen, Strife) | Fork propio, pendiente | En curso |
+| Duke Nukem 3D | Pendiente | Siguiente |
+| Motor compatible con MUGEN | Pendiente | Después de Duke Nukem 3D |
+
+## Plan
+
+1. **Crispy Doom:** Doom 1 y 2, Final Doom, Freedoom, Heretic, Hexen y Strife, con un menú para elegir el juego y los mods (WADs) de una carpeta de la SD. Crispy Doom es Chocolate Doom con pantalla ancha (aprovecha los 400x240 de arriba) y límites ampliados: carga los mods del formato original y los de límites ampliados. Reemplaza al Doom de PrBoom que viene de la DS.
+2. **Duke Nukem 3D:** ya hay ports (EDuke3D, dn3ds); el nuestro aplicaría el estándar (60 FPS, mapa abajo, controles).
+3. **Motor compatible con MUGEN:** MUGEN es cerrado y Ikemen GO está en Go con OpenGL, así que es otro tipo de proyecto, más grande.
+4. **Largo plazo:**
+   - **Woof!:** el mismo estándar para los mods de formato Boom/MBF (la mayoría de los modernos). Solo la familia Doom.
+   - **Brutal Doom:** necesita un motor de la familia ZDoom; las versiones nuevas piden GZDoom 4, demasiado para la 3DS. Investigar ZDoom 2.8 con Brutal Doom v20.
+   - Return to Castle Wolfenstein y Enemy Territory.
+
+Todos los FPS siguen el [estándar de controles](docs/controles-fps.md): 60 FPS, HUD y mapa en la pantalla de abajo, doble stick y botones reasignables.
 
 El catálogo completo, con 33 ideas en 4 niveles, está en [`docs/catalogo.md`](docs/catalogo.md).
 
