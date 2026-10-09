@@ -41,6 +41,15 @@ Los botones de la 3DS se agregaron como códigos de tecla (`sc_n3ds_a`…). Así
 
 Lo más valioso: medir. Los números en la pantalla de abajo mostraron que el juego casi no costaba nada y que el problema eran esperas, no cálculo.
 
+## Release 1.0.0
+
+Publicado como [n3ds-v1.0.0](https://github.com/AlexanderV387/bstone/releases/tag/n3ds-v1.0.0) (`.cia` y `.3dsx`). Además de lo anterior:
+
+- **Pantalla de abajo:** barra de estado, mapa de lo explorado (centrado en el jugador) y barra de zona, copiadas 1:1 de la interfaz de 320x200; la vista 3D ocupa toda la pantalla de arriba. El orden de las barras se puede intercambiar, y el diseño original sigue como opción.
+- **Diagonales lentas:** el Circle Pad es circular (en diagonal cada eje llega a ~70%) y BStone usaba solo la parte frontal del movimiento al desplazarse de lado. Zona muerta radial y longitud completa del movimiento.
+- **Cierre lento desde HOME:** el juego esperaba el vsync de pantallas que ya no eran suyas. Con `aptShouldClose()` deja de esperar.
+- Un solo `.cia` para los tres juegos: BStone detecta el juego al arrancar; con más de uno, menú propio (y Quit vuelve a él en el `.cia`).
+
 ## Pendiente
 
 - Probar el HUD y el mapa en la pantalla de abajo.
