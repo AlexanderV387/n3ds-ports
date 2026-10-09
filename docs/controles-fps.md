@@ -84,6 +84,12 @@ Predeterminados de Wolfenstein (R dispara, como en la mayoría de los FPS):
 - Se agregan al final del formato original, detrás de un número mágico (`0x3d50` en Wolfenstein), para que los archivos de configuración viejos sigan cargando.
 - Validar al leer: valores fuera de rango vuelven al predeterminado.
 
+## HOME y la tarjeta SD
+
+- Cerrar desde HOME: SDL manda `SDL_QUIT` cuando `aptMainLoop()` devuelve falso. Comprobar que el juego lo procese (BStone lo ignoraba y el menú HOME esperaba para siempre). Al cerrar desde HOME no esperar el vsync ni presentar: las pantallas ya son del menú HOME.
+- Guardar configuración y récords en `APTHOOK_ONSUSPEND` (al pulsar HOME) y no volver a guardar si se cierra desde ahí: con el menú HOME al frente, escribir en la SD fue mucho más lento.
+- No vaciar un archivo para reescribirlo, ni escribir a un temporal y renombrarlo: escribir en un archivo recién creado o vaciado a veces tarda 8 segundos en la SD. Escribir encima del existente y recortarlo al final.
+
 ## Empaquetado
 
 - Un `.cia` arranca **sin argumentos** (`argc` = 0); un `.3dsx` recibe su ruta como `argv[0]`. Si el port agrega opciones a la línea de comandos (por ejemplo, el juego elegido en un menú), primero hay que poner un nombre de programa. En Blake Stone, la opción se perdía y el `.cia` fallaba aunque el `.3dsx` funcionaba: probar siempre los dos.

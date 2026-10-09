@@ -50,9 +50,30 @@ Publicado como [n3ds-v1.0.0](https://github.com/AlexanderV387/bstone/releases/ta
 - **Cierre lento desde HOME:** el juego esperaba el vsync de pantallas que ya no eran suyas. Con `aptShouldClose()` deja de esperar.
 - Un solo `.cia` para los tres juegos: BStone detecta el juego al arrancar; con más de uno, menú propio (y Quit vuelve a él en el `.cia`).
 
+## Releases 1.0.1 a 1.0.4
+
+- **1.0.1-1.0.3:** opción con todo arriba y la pantalla de abajo apagada; el `.cia` no recibe argumentos (se perdía el juego elegido en el menú); efecto de muerte con los puntos rojos originales (el suave solo existe en OpenGL/Vulkan).
+- **1.0.4:** el cierre infinito desde HOME, por fin, y las esperas de 8 segundos.
+
+### Cerrar desde HOME: tres teorías equivocadas y una medición
+
+El juego se quedaba en "cerrando" para siempre. Probé el hilo de audio esperando un búfer que nunca terminaba, el núcleo del sistema sin tiempo, y un hilo de mayor prioridad que no dejaba correr al de los avisos de libctru. Los arreglos eran razonables, pero ninguno era la causa.
+
+Lo que funcionó fue medir: envolver `svcSendSyncRequest` con `--wrap` del enlazador y anotar cada petición al sistema (antes y después) desde que se pulsa HOME. El primer intento congeló todo: la escritura del registro a la SD usa el mismo búfer de comandos del hilo y pisaba la respuesta que estaba registrando. Guardando y restaurando ese búfer, el registro mostró que libctru recibía la orden de cerrar y volvía normalmente. El problema era de BStone: su capa de eventos ignoraba `SDL_QUIT`, así que el juego seguía corriendo sin mostrar nada.
+
+| Problema | Causa | Solución |
+|---|---|---|
+| Cierre infinito desde HOME | `SDL_QUIT` descartado por el gestor de eventos de BStone | Traducirlo al evento de salir |
+| Cierre de 8,5 s después del arreglo | Guardar la configuración con el menú HOME al frente | Guardar al pulsar HOME; al cerrar desde ahí solo sale |
+| Se cortaba el audio del menú HOME al cerrar | `ndspExit` descargaba el componente DSP, que ya era del menú HOME | No llamar `ndspExit` si el DSP fue cancelado |
+| Panel del ascensor sin respuesta | En modo juego la A no es Enter | Controles de menú en el panel |
+| Tirones al sonar algo por primera vez | El hilo de audio en el núcleo del juego con más prioridad (mi cambio para la teoría equivocada) | De vuelta al tercer núcleo |
+| Esperas de 8,4 s al arrancar, al pulsar HOME y al guardar | Escribir un archivo recién creado o vaciado en la SD a veces tardaba 8,4 s (probablemente buscando espacio libre en toda la FAT) | Escribir encima de los archivos existentes y recortarlos al cerrar |
+
+Las esperas de 8,4 s aparecían en lugares distintos en cada prueba (antes del menú de juegos, al crear el log, al guardar la configuración). Lo que tenían en común era el archivo, no el código: siempre era la primera escritura en un archivo recién vaciado.
+
 ## Pendiente
 
-- Probar el HUD y el mapa en la pantalla de abajo.
-- `.cia` (activar Actions en el fork), arte propio y release.
-- Revisar en Wolfenstein si tiene la misma doble espera (tic + vsync).
-- Arte propio (ícono y banner) y activar Actions en el fork para el `.cia`.
+- Revisar en Wolfenstein si tiene la misma doble espera (tic + vsync) para llegar a 60 FPS.
+- Revisar si Wolfenstein escribe archivos de la misma forma (vaciar y reescribir).
+- Banner sin la errata "ALIENS STRIKE".
