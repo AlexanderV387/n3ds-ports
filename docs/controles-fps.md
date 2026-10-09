@@ -61,16 +61,22 @@ Predeterminados de Wolfenstein (R dispara, como en la mayoría de los FPS):
 ## Pantallas
 
 - Pantalla de arriba: el juego.
-- Pantalla de abajo: el HUD (vida, munición, cara, llaves) cuando el juego está a pantalla completa, con posición configurable (arriba, en medio o abajo de la pantalla inferior; abajo por defecto). En Wolfenstein se dibuja cada cuadro con las funciones originales de la barra de estado en una superficie aparte.
-- Si el HUD deja espacio libre abajo, un mapa de lo explorado centrado en el jugador (Blake Stone: barra de zona arriba, mapa en medio, barra de estado abajo; la vista 3D ocupa toda la pantalla de arriba).
+- Pantalla de abajo: **estadísticas (HUD) y mapa juntos.** Es la filosofía de todos los FPS de este tipo:
+  - Con la vista a pantalla completa, el HUD (vida, munición, cara, llaves) y el mapa comparten la pantalla de abajo. Estadísticas arriba del mapa por defecto; una opción del menú las pone abajo.
+  - Con una vista más pequeña, el HUD vuelve a la pantalla de arriba como en el original y el mapa ocupa toda la de abajo.
+  - El mapa se ve desde el inicio de la partida, con cualquier tamaño de vista; solo lo esconde su opción del menú. Sin mapa, el HUD puede ir arriba, en medio o abajo de la pantalla inferior.
+  - El mapa muestra solo lo que el jugador ya vio, centrado en él, con su dirección: pisos, paredes y puertas en colores distintos. Si el juego trae su propio mapa (Blake Stone, el automapa de Doom), se usa ese; si no lo trae (Wolfenstein), se agrega uno como extra opcional, a partir de lo que el motor marca como visible en cada cuadro.
+  - En Wolfenstein el HUD se dibuja cada cuadro con las funciones originales de la barra de estado en una superficie aparte; en Blake Stone se copian 1:1 las filas de la interfaz de 320x200.
 - Todos los caminos que muestran un cuadro deben actualizar la pantalla de abajo (en Wolfenstein, `N3DS_Flip` en lugar de `SDL_Flip`). La partida usaba su propio blit + flip y el HUD se quedaba congelado.
-- Un toque en la pantalla táctil apaga o enciende la de abajo (ahorra batería), en cualquier momento: título, menús y juego. Con el HUD visible el toque no la apaga, y si estaba apagada se enciende sola al aparecer el HUD.
+- Un toque en la pantalla táctil apaga o enciende la de abajo (ahorra batería), en cualquier momento: título, menús y juego. Con el HUD o el mapa visibles el toque no la apaga, y si estaba apagada se enciende sola al aparecer.
 - **Abrir `gsp::Lcd` solo alrededor de cada cambio de brillo** (`gspLcdInit` → `GSPLCD_PowerOn/OffBacklight` → `gspLcdExit`). Dejar la sesión abierta todo el juego congeló la consola al presionar HOME en Wolfenstein: el menú HOME necesita ese mismo servicio.
 - Con `aptHook`, encender la pantalla de abajo al ir a HOME, al dormir y al salir, y volver a apagarla al regresar si estaba apagada. También con `atexit`.
 - En SDL 1.2 para 3DS, `SDL_DUALSCR` con una superficie de 400×480 da las dos pantallas: filas 0-239 arriba y 240-479 abajo (se ven las columnas 40-359, 1:1). Sin consola de texto: `consoleDebugInit(debugDevice_NULL)`.
 - Quitar pantallas de PC sin sentido en la consola, como la verificación de memoria de DOS.
 
 ## Rendimiento
+
+- **El ritmo lo marca solo el refresco de la pantalla (60 Hz).** Los motores de id cuentan el tiempo en tics de 70 Hz y duermen hasta el siguiente: con el vsync encima, las dos esperas se desfasan (Blake Stone quedaba en 40 FPS); sin vsync, el juego corre a 70 y la pantalla muestra 60 de esos cuadros de forma desigual (Wolfenstein, porque SDL 1.2 presenta desde su propio hilo). En ambos casos: no dormir hasta el tic, esperar el vblank en el hilo del juego y calcular los tics con el tiempo transcurrido.
 
 - **Objetivo: 60 FPS sin sacrificar calidad; mínimo aceptable, 30.** Se mide en hardware con un contador pequeño en una esquina de la pantalla de abajo (opción, apagado por defecto): cuadros por segundo y milisegundos por cuadro.
 - Medir antes de optimizar: separar el tiempo del dibujo 3D, el de copiar a la pantalla y el resto. En Blake Stone el juego costaba ~7 ms y aun así iba a 40 FPS: el resto era espera.

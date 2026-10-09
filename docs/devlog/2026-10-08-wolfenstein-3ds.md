@@ -56,11 +56,18 @@ Publicado como [v1.0.0](https://github.com/AlexanderV387/wolf4sdl-3ds/releases/t
 
 **Lección:** al portar a otra resolución, hay que revisar cada coordenada fija (`VWB_DrawPic (0,0,…)`, `112`, `60`…). El port original ajustó lo que se veía en Wolfenstein, pero no lo que solo usa Spear of Destiny.
 
+## v1.4.0: lo aprendido en Blake Stone (9 de octubre)
+
+- **60 FPS.** No tenía la doble espera de Blake Stone, pero sí el mismo fondo: `CalcTics` dormía hasta el siguiente tic de 70 Hz y SDL 1.2 presenta desde su propio hilo, así que nada sincronizaba el juego con la pantalla. Corría a 70 y la pantalla mostraba 60 de esos cuadros de forma desigual. Ahora `N3DS_Flip` espera el vblank (salvo al cerrar desde HOME) y `CalcTics` ya no duerme.
+- **Mapa en la pantalla de abajo.** El original no tiene mapa. El motor marca en `spotvis` las casillas que se ven en cada cuadro (y lo borra al siguiente); el port las acumula en un arreglo propio que se limpia al empezar cada nivel. Paredes y puertas aparecen cuando se vio una casilla vecina. Con la vista a pantalla completa va junto a la barra de estado; con una vista más pequeña ocupa toda la pantalla de abajo. Se guarda en la configuración (opción y contador de FPS) detrás de los campos anteriores; las configuraciones viejas quedan con mapa y estadísticas arriba.
+- **Guardar sin esperas.** Las partidas se borraban y se creaban de nuevo (`unlink` + `fopen "wb"`), y el selector reescribía `last-game.txt` en cada arranque: lo mismo que congelaba Blake Stone 8 segundos. Ahora se escriben encima (`"r+b"`) y se recortan al final con `ftruncate`.
+
 ## Estado
 
-Probado en New 3DS: Wolfenstein 3D, Spear of Destiny y el `.cia` combinado (v1.3.1).
+Probado en New 3DS: Wolfenstein 3D, Spear of Destiny y el `.cia` combinado (v1.4.0: mapa, 60 FPS y guardado probados).
 
 ## Pendiente
 
 - Probar el shareware y la demo de SoD en hardware.
-- Siguiente: Blake Stone (BStone), mismo motor; después Chocolate Doom.
+- Guardar lo explorado en las partidas (al cargar, el mapa empieza vacío).
+- Siguiente: Chocolate Doom (su automapa irá a la pantalla de abajo).
