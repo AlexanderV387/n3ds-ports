@@ -47,7 +47,20 @@ Publicado como [v1.0.0](https://github.com/AlexanderV387/wolf4sdl-3ds/releases/t
 - Selector de misiones de Spear of Destiny: un `.cia` no puede pasar `--mission`, así que las expansiones (`*.sd2`, `*.sd3`) eran inalcanzables. Si la carpeta tiene más de una misión, un menú de texto de libctru en la pantalla de arriba deja elegir antes de que arranque SDL.
 - Aclaración: los archivos `.SOD` son el juego completo; `.SDM` es la demo; `.SD2` y `.SD3` son expansiones que se vendían aparte. Steam trae solo `.SOD`.
 
+## v1.2.0 a v1.3.1 (9 de octubre)
+
+- **Un solo `.cia` para todos los juegos (`wolf4sdl-all`).** Wolf4SDL elige el juego al compilar (`#ifdef SPEAR`), así que no se puede cambiar en tiempo de ejecución. Solución: compilar las cuatro variantes, renombrar con `objcopy --redefine-syms` todos los símbolos globales que define cada una (`main` → `w3d_main`, `sod_main`…) y enlazarlas juntas con un menú de libctru que solo muestra los juegos cuyos datos están en la SD. Cada variante ocupa ~300 KB; el combinado pesa 1,5 MB. Los `.cia` separados se mantienen.
+- **Quit vuelve al menú de juegos** en el combinado: `aptSetChainloaderToSelf()` hace que la aplicación se reinicie al salir, así cada juego se cierra limpio. Solo en `.cia` y con más de un juego.
+- **Menús y pantallas de SoD descentrados.** El port original centra el menú en la pantalla de 400x240, pero el fondo de SoD (una imagen de 320x200), su título (dos imágenes) y los créditos se dibujaban en la esquina. Ahora están centrados; el fondo del menú se repite para llenar los bordes.
+- Arte propio (IA) para SoD y para el combinado.
+
+**Lección:** al portar a otra resolución, hay que revisar cada coordenada fija (`VWB_DrawPic (0,0,…)`, `112`, `60`…). El port original ajustó lo que se veía en Wolfenstein, pero no lo que solo usa Spear of Destiny.
+
+## Estado
+
+Probado en New 3DS: Wolfenstein 3D, Spear of Destiny y el `.cia` combinado (v1.3.1).
+
 ## Pendiente
 
-- Probar Spear of Destiny completo y el shareware en hardware.
+- Probar el shareware y la demo de SoD en hardware.
 - Siguiente: Blake Stone (BStone), mismo motor; después Chocolate Doom.
