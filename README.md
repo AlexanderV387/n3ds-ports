@@ -11,13 +11,14 @@ El objetivo es aprender C/C++, render y optimización con poca RAM, y dejar trab
 | Hola mundo (devkitPro + SDL2) | [`hello-world/`](hello-world/) | Funciona en New 3DS: 59,8 FPS estables con vsync |
 | Wolfenstein 3D y Spear of Destiny | [wolf4sdl-3ds](https://github.com/AlexanderV387/wolf4sdl-3ds) (rama `n3ds`) | Terminado ([v1.4.1](https://github.com/AlexanderV387/wolf4sdl-3ds/releases/tag/v1.4.1)): 60 FPS, doble stick, giro táctil, botones reasignables, HUD y mapa abajo, todos los juegos en un `.cia` con menú |
 | Blake Stone (Aliens of Gold, Planet Strike) | [bstone](https://github.com/AlexanderV387/bstone) (rama `n3ds`) | [v1.0.4](https://github.com/AlexanderV387/bstone/releases/tag/n3ds-v1.0.4): 60 FPS, HUD y mapa abajo, vista 3D a pantalla completa, `.cia` |
-| Crispy Doom (Doom, Heretic, Hexen, Strife) | Fork propio, pendiente | En curso |
+| Crispy Doom (Doom, Heretic, Hexen, Strife) | [crispy-doom](https://github.com/AlexanderV387/crispy-doom) (rama `n3ds`) | En curso: Doom a 60 FPS (mínimo 57) con vista completa, barra de estado y automapa con zoom abajo, botones reasignables, giro táctil, arranque en 1,3 s ([devlog](docs/devlog/2026-10-10-crispy-doom.md)). Falta el selector de juegos y mods, el `.cia`, Heretic, Hexen y Strife |
 | Duke Nukem 3D | Pendiente | Siguiente |
 | Motor compatible con MUGEN | Pendiente | Después de Duke Nukem 3D |
 
 ## Plan
 
-1. **Crispy Doom:** Doom 1 y 2, Final Doom, Freedoom, Heretic, Hexen y Strife, con un menú para elegir el juego y los mods (WADs) de una carpeta de la SD. Crispy Doom es Chocolate Doom con pantalla ancha (aprovecha los 400x240 de arriba) y límites ampliados: carga los mods del formato original y los de límites ampliados. Reemplaza al Doom de PrBoom que viene de la DS.
+1. **Crispy Doom:** Doom 1 y 2, Final Doom, Freedoom, Heretic, Hexen y Strife, con un menú para elegir el juego y los mods (WADs) de una carpeta de la SD. Crispy Doom es Chocolate Doom con pantalla ancha (aprovecha los 400x240 de arriba) y límites ampliados: carga los mods del formato original y los de límites ampliados. Ya existe [PrBoom+ para 3DS](https://db.universal-team.net/3ds/prboom) (Voxel), con OpenGL, 3D estereoscópico y mods Boom/MBF; este port apunta a otra cosa: los cuatro juegos del motor, el estándar del proyecto (pantalla de abajo, controles) y 60 FPS.
+   - Pendiente: menú para elegir juego y mods, `.cia` con [Freedoom](https://freedoom.github.io/) incluido (es libre, BSD) para que funcione sin archivos del usuario, y detectar la Old 3DS (hecho, sin probar).
    - Después del estándar: **dibujo repartido entre dos núcleos** (el tercero del New 3DS), para acercar la alta resolución (800x400 promediada a 400x240, hoy 25-31 ms por cuadro, 30 FPS) a 60 FPS. Opción experimental; la técnica sirve después para Heretic, Hexen, Strife y Woof!.
 2. **Duke Nukem 3D:** ya hay ports (EDuke3D, dn3ds); el nuestro aplicaría el estándar (60 FPS, mapa abajo, controles).
 3. **Motor compatible con MUGEN:** MUGEN es cerrado y Ikemen GO está en Go con OpenGL, así que es otro tipo de proyecto, más grande.

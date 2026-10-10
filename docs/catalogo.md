@@ -54,7 +54,7 @@ Estos juegos ya tienen port, así que no conviene repetirlos salvo para mejorarl
 | Quake 1, 2 y 3 | ctrQuake, Quake2CTR, ioQuake3DS |
 | Duke Nukem 3D | EDuke3D, dn3ds |
 | Shadow Warrior | JFShadowWarrior (MrHuu), en desarrollo |
-| Doom | PrBoom+ / prboom3ds (no cubre Heretic ni Hexen) |
+| Doom | PrBoom+ 3DS (Voxel; PrBoom+ 2.6.66, OpenGL con 3D estereoscópico, mods Boom/MBF; no cubre Heretic ni Hexen) |
 | Diablo | DevilutionX 3DS, Devil-3Ds |
 | Super Mario 64 | Port basado en la decompilación, 30 fps |
 | Mario Kart 64 | EstebanPdN |

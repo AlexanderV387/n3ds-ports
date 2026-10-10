@@ -11,7 +11,7 @@ Lo que definimos al portar Wolfenstein 3D (wolf4sdl-3ds, rama `n3ds`) y que se a
 | START | Salir del menú de una vez y volver al juego (o al título) |
 | Cruceta / Circle Pad | Moverse por el menú |
 
-- Salir del juego solo con la opción "Quit". B en el menú principal vuelve al juego durante una partida y no hace nada en el título: un B + A accidental cerraba el juego y se perdía el progreso.
+- Salir del juego solo con la opción "Quit". B en el menú principal cierra el menú (vuelve al juego o al título), igual que START; nunca lleva a "Quit": un B + A accidental cerraba el juego y se perdía el progreso. En los demás menús, B regresa al anterior.
 
 - Leer los botones directo con libctru (`hidKeysHeld`), no a través de SDL. SDL 1.2 para 3DS numera START como botón 0 y A como botón 1, y eso invierte aceptar y volver.
 - Al abrir y al cerrar el menú, esperar a que se suelte START; si no, el mismo toque lo vuelve a abrir o cerrar.
@@ -22,7 +22,7 @@ Lo que definimos al portar Wolfenstein 3D (wolf4sdl-3ds, rama `n3ds`) y que se a
 - Circle Pad: avanzar/retroceder y moverse de lado (*strafe*).
 - C-stick: girar la cámara.
 - Modo clásico opcional: el Circle Pad avanza y gira, como el original.
-- Giro con la pantalla táctil (opcional, para 3DS sin C-stick): deslizar a izquierda o derecha gira, con su propia velocidad (1-10). Se suma **después** del tope de giro por cuadro del motor: ese tope es para teclas y sticks y cortaba los deslizamientos rápidos. Con esta opción activa, el toque no apaga la pantalla de abajo durante la partida.
+- Giro con la pantalla táctil (opcional, para 3DS sin C-stick): deslizar a izquierda o derecha gira, con su propia velocidad (1-10). Se suma **después** del tope de giro por cuadro del motor: ese tope es para teclas y sticks y cortaba los deslizamientos rápidos. Si el motor tiene mouse (Doom), mandarlo como movimiento de mouse: ya se aplica cada cuadro y sin tope. Con esta opción activa, el toque no apaga la pantalla de abajo durante la partida, y un deslizamiento que empieza en los botones de la pantalla de abajo (el zoom del mapa) no gira: los dos conviven.
 
 **Velocidad analógica:**
 - La inclinación del stick es proporcional: a medio camino, más lento.
@@ -46,6 +46,8 @@ Aplica igual al Circle Pad y a la cruceta.
 - Un botón pertenece a una sola acción (al asignarlo se quita de la anterior); una acción puede tener varios botones.
 - START y la cruceta no se reasignan: START es el menú, la cruceta mueve.
 - El menú muestra nombres de botones de 3DS, nunca teclas de PC, mouse ni joystick.
+- Si el motor permite un solo botón por acción (Doom: `joyb_fire`…), cada acción se vuelve un **botón virtual**: su bit se enciende si se presiona cualquiera de los botones de 3DS asignados a ella. A, B y START se mandan aparte como ellos mismos, para que los menús usen siempre A/B aunque se reasignen.
+- Quitar atajos del motor que estorban con mando, como el "doble toque de strafe = usar" de Doom (L abría puertas).
 
 Predeterminados de Wolfenstein (R dispara, como en la mayoría de los FPS):
 
@@ -65,8 +67,9 @@ Predeterminados de Wolfenstein (R dispara, como en la mayoría de los FPS):
   - Con la vista a pantalla completa, el HUD (vida, munición, cara, llaves) y el mapa comparten la pantalla de abajo. Estadísticas arriba del mapa por defecto; una opción del menú las pone abajo.
   - Con una vista más pequeña, el HUD vuelve a la pantalla de arriba como en el original y el mapa ocupa toda la de abajo.
   - El mapa se ve desde el inicio de la partida, con cualquier tamaño de vista; solo lo esconde su opción del menú. Sin mapa, el HUD puede ir arriba, en medio o abajo de la pantalla inferior.
-  - El mapa muestra solo lo que el jugador ya vio, centrado en él, con su dirección: pisos, paredes y puertas en colores distintos. Si el juego trae su propio mapa (Blake Stone, el automapa de Doom), se usa ese; si no lo trae (Wolfenstein), se agrega uno como extra opcional, a partir de lo que el motor marca como visible en cada cuadro.
-  - En Wolfenstein el HUD se dibuja cada cuadro con las funciones originales de la barra de estado en una superficie aparte; en Blake Stone se copian 1:1 las filas de la interfaz de 320x200.
+  - El mapa muestra solo lo que el jugador ya vio, centrado en él, con su dirección: pisos, paredes y puertas en colores distintos. Botones **+** y **−** en una esquina para el zoom (un toque acerca un cuarto; mantenerlo sigue acercando), guardado en la configuración. Si el juego trae su propio mapa (Blake Stone, el automapa de Doom), se usa ese; si no lo trae (Wolfenstein), se agrega uno como extra opcional, a partir de lo que el motor marca como visible en cada cuadro.
+  - En Wolfenstein el HUD se dibuja cada cuadro con las funciones originales de la barra de estado en una superficie aparte; en Blake Stone se copian 1:1 las filas de la interfaz de 320x200. En Doom, la barra y el automapa se dibujan con sus propias funciones en otro búfer, guardando y restaurando el estado del automapa.
+  - La pantalla de abajo basta a 30 cuadros por segundo.
 - Todos los caminos que muestran un cuadro deben actualizar la pantalla de abajo (en Wolfenstein, `N3DS_Flip` en lugar de `SDL_Flip`). La partida usaba su propio blit + flip y el HUD se quedaba congelado.
 - Un toque en la pantalla táctil apaga o enciende la de abajo (ahorra batería), en cualquier momento: título, menús y juego. Con el HUD o el mapa visibles el toque no la apaga, y si estaba apagada se enciende sola al aparecer.
 - **Abrir `gsp::Lcd` solo alrededor de cada cambio de brillo** (`gspLcdInit` → `GSPLCD_PowerOn/OffBacklight` → `gspLcdExit`). Dejar la sesión abierta todo el juego congeló la consola al presionar HOME en Wolfenstein: el menú HOME necesita ese mismo servicio.
@@ -83,6 +86,9 @@ Predeterminados de Wolfenstein (R dispara, como en la mayoría de los FPS):
 - **Una sola espera por cuadro.** Si el motor duerme hasta su propio "tic" (70 Hz en los motores de id) y además se espera el vsync (60 Hz), las dos esperas se desfasan y muchos cuadros pierden un refresco (~40 FPS). En la 3DS el ritmo lo marca el vsync; el motor solo mide el tiempo transcurrido.
 - SDL2 en la 3DS ignora el vsync y su renderizador por software escala, mezcla y rota con la CPU: es mejor componer la imagen y copiarla ya rotada al framebuffer (`gfxGetFramebuffer`), en bloques de 8x8 para aprovechar la caché, y esperar con `gspWaitForVBlank`.
 - El hilo de audio de SDL va al núcleo del sistema con 30% de su tiempo; con música emulada (OPL) se corta. Usar el tercer núcleo del New 3DS, o subir el límite al 80%.
+- **Componer las pantallas en otro núcleo.** Convertir el cuadro a color, estirarlo y girarlo costaba ~3 ms por cuadro en Doom. El hilo del juego copia el cuadro y un hilo en el núcleo 1 (`APT_SetAppCpuTimeLimit(80)`) compone, intercambia y espera el vblank; el juego solo espera si ese hilo no terminó. En Crispy Doom: de 47 a 57 FPS en el peor momento. El contador muestra los milisegundos de los dos núcleos.
+- **Detectar la Old 3DS** (`APT_CheckNew3DS`): un tercio de la velocidad y sin tercer núcleo. Bajar lo caro (resolución alta, frecuencia de audio) y no poner hilos extra en el núcleo 1, que ya tiene el audio.
+- **Arranque:** el log con milisegundos en cada línea encuentra las esperas. En Crispy Doom: leer los archivos de datos completos a la memoria de una vez, guardar en la SD las tablas que se calculan en cada arranque, no buscar archivos opcionales nombre por nombre y quitar esperas fijas para monitores de PC. De ~20 s a 1,3 s.
 
 ## Configuración guardada
 
@@ -94,7 +100,13 @@ Predeterminados de Wolfenstein (R dispara, como en la mayoría de los FPS):
 
 - Cerrar desde HOME: SDL manda `SDL_QUIT` cuando `aptMainLoop()` devuelve falso. Comprobar que el juego lo procese (BStone lo ignoraba y el menú HOME esperaba para siempre). Al cerrar desde HOME no esperar el vsync ni presentar: las pantallas ya son del menú HOME.
 - Guardar configuración y récords en `APTHOOK_ONSUSPEND` (al pulsar HOME) y no volver a guardar si se cierra desde ahí: con el menú HOME al frente, escribir en la SD fue mucho más lento.
-- No vaciar un archivo para reescribirlo, ni escribir a un temporal y renombrarlo: escribir en un archivo recién creado o vaciado a veces tarda 8 segundos en la SD. Escribir encima del existente y recortarlo al final.
+- No vaciar un archivo para reescribirlo, ni escribir a un temporal y renombrarlo: escribir en un archivo recién creado o vaciado a veces tarda 8 segundos en la SD. Escribir encima del existente y recortarlo al final. Tampoco reescribir archivos que no cambian en cada arranque (el `README.txt` de los packs de música de Crispy).
+
+## SDL2 en la 3DS
+
+- SDL 2.30.9: `SDL_CondWaitTimeout` con un mutex de SDL se bloquea para siempre (espera con el `LightLock` interno del `RecursiveLock`). Parche en `crispy-doom/tools/3ds/patches/sdl-cond-recursive-mutex.patch`.
+- No hay `/tmp`: lo que el motor escriba ahí, hacerlo en memoria (`fmemopen`) o en la carpeta del juego (`TMPDIR`).
+- Pila del hilo principal: 32 KB por defecto; Doom necesita `__stacksize__` de 1 MB.
 
 ## Empaquetado
 
