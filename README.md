@@ -12,6 +12,8 @@ El objetivo es aprender C/C++, render y optimización con poca RAM, y dejar trab
 | Wolfenstein 3D y Spear of Destiny | [wolf4sdl-3ds](https://github.com/AlexanderV387/wolf4sdl-3ds) (rama `n3ds`) | Terminado ([v1.4.1](https://github.com/AlexanderV387/wolf4sdl-3ds/releases/tag/v1.4.1)): 60 FPS, doble stick, giro táctil, botones reasignables, HUD y mapa abajo, todos los juegos en un `.cia` con menú |
 | Blake Stone (Aliens of Gold, Planet Strike) | [bstone](https://github.com/AlexanderV387/bstone) (rama `n3ds`) | [v1.0.4](https://github.com/AlexanderV387/bstone/releases/tag/n3ds-v1.0.4): 60 FPS, HUD y mapa abajo, vista 3D a pantalla completa, `.cia` |
 | Crispy Doom (Doom, Doom II, Final Doom, Freedoom) | [crispy-doom](https://github.com/AlexanderV387/crispy-doom) (rama `n3ds`) | [n3ds-v1.0.0](https://github.com/AlexanderV387/crispy-doom/releases/tag/n3ds-v1.0.0): 60 FPS (mínimo 57; Freedoom 54), barra de estado y automapa con zoom abajo, botones reasignables, giro táctil, selector de juego y mods, `.cia` ([devlog](docs/devlog/2026-10-10-crispy-doom.md)). Base de Heretic, Hexen y Strife |
+| Strife | [crispy-doom](https://github.com/AlexanderV387/crispy-doom) (rama `n3ds`, `crispy-strife`) | En pruebas: funciona en `.3dsx`, voces, inventario táctil, teclado en pantalla; falta probar el `.cia` y publicarlo |
+| Hexen | crispy-doom (`crispy-hexen`) | Siguiente |
 | DSDA-Doom (mods Boom/MBF/MBF21, Heretic, Hexen) | Pendiente | Siguiente: el port principal para mods |
 | Duke Nukem 3D | Pendiente | Siguiente |
 | Motor compatible con MUGEN | Pendiente | Después de Duke Nukem 3D |
@@ -28,6 +30,12 @@ El objetivo es aprender C/C++, render y optimización con poca RAM, y dejar trab
 8. **Largo plazo:**
    - **Brutal Doom:** necesita un motor de la familia ZDoom (DECORATE o ZScript; ningún port Boom/MBF lo corre). Investigar ZDoom 2.8 con Brutal Doom v20; probablemente lento en peleas grandes.
    - Return to Castle Wolfenstein y Enemy Territory.
+
+Pendientes pequeños:
+
+- Opción **Auto Fire** (apagada por defecto) en Wolfenstein 3D y Blake Stone: que la pistola y el cuchillo disparen seguido al mantener el botón. Por defecto siguen como en DOS, un disparo por presión.
+- Publicar Crispy Doom 1.0.1 con Strife (teclado en pantalla, configuración guardada al cerrar el menú, cámara clásica o libre).
+- Publicar Wolf4SDL y BStone con el teclado en pantalla (probado en la consola).
 
 Todos los FPS siguen el [estándar de controles](docs/controles-fps.md): 60 FPS, HUD y mapa en la pantalla de abajo, doble stick y botones reasignables.
 
