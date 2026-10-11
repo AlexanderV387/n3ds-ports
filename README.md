@@ -12,21 +12,20 @@ El objetivo es aprender C/C++, render y optimización con poca RAM, y dejar trab
 | Wolfenstein 3D y Spear of Destiny | [wolf4sdl-3ds](https://github.com/AlexanderV387/wolf4sdl-3ds) (rama `n3ds`) | Terminado ([v1.4.1](https://github.com/AlexanderV387/wolf4sdl-3ds/releases/tag/v1.4.1)): 60 FPS, doble stick, giro táctil, botones reasignables, HUD y mapa abajo, todos los juegos en un `.cia` con menú |
 | Blake Stone (Aliens of Gold, Planet Strike) | [bstone](https://github.com/AlexanderV387/bstone) (rama `n3ds`) | [v1.0.4](https://github.com/AlexanderV387/bstone/releases/tag/n3ds-v1.0.4): 60 FPS, HUD y mapa abajo, vista 3D a pantalla completa, `.cia` |
 | Crispy Doom (Doom, Doom II, Final Doom, Freedoom) | [crispy-doom](https://github.com/AlexanderV387/crispy-doom) (rama `n3ds`) | [n3ds-v1.0.0](https://github.com/AlexanderV387/crispy-doom/releases/tag/n3ds-v1.0.0): 60 FPS (mínimo 57; Freedoom 54), barra de estado y automapa con zoom abajo, botones reasignables, giro táctil, selector de juego y mods, `.cia` ([devlog](docs/devlog/2026-10-10-crispy-doom.md)). Base de Heretic, Hexen y Strife |
-| Strife | [crispy-doom](https://github.com/AlexanderV387/crispy-doom) (rama `n3ds`, `crispy-strife`) | En pruebas: funciona en `.3dsx`, voces, inventario táctil, teclado en pantalla; falta probar el `.cia` y publicarlo |
-| Hexen | crispy-doom (`crispy-hexen`) | Siguiente |
-| DSDA-Doom (mods Boom/MBF/MBF21, Heretic, Hexen) | Pendiente | Siguiente: el port principal para mods |
-| Duke Nukem 3D | Pendiente | Siguiente |
-| Motor compatible con MUGEN | Pendiente | Después de Duke Nukem 3D |
+| Strife | [crispy-doom](https://github.com/AlexanderV387/crispy-doom) (rama `n3ds`, `crispy-strife`) | Probado en `.3dsx` y `.cia`: voces, inventario táctil, teclado en pantalla. Listo para publicar con Crispy Doom 1.0.1 |
+| DSDA-Doom (mods Boom/MBF/MBF21, Heretic, Hexen) | Pendiente | Siguiente: el port principal para mods, con Heretic y Hexen |
+| Duke Nukem 3D | Pendiente | Después de MUGEN y del renderizador por GPU |
+| Motor compatible con MUGEN | Pendiente | Después de DSDA-Doom y la parte 2D de la GPU |
 
 ## Plan
 
-1. **Crispy Doom** ([1.0.0](https://github.com/AlexanderV387/crispy-doom/releases/tag/n3ds-v1.0.0)): Doom como era en DOS, en pantalla ancha, con los mods del formato original y de límites ampliados. Queda como la base de **Strife** y de **Hexen** (completo en Crispy). Ya existe [PrBoom+ para 3DS](https://db.universal-team.net/3ds/prboom) (Voxel), con OpenGL, 3D estereoscópico y mods Boom/MBF; este port apunta al estándar del proyecto (pantalla de abajo, controles) y a 60 FPS.
-2. **DSDA-Doom:** el port principal para mods: Doom con todos los formatos (original, Boom, MBF, MBF21, UMAPINFO, UDMF), Heretic y mods de Hexen. Sucesor de PrBoom+. Primera etapa por software, sin su OpenGL (2.0 con shaders, que la GPU de la 3DS no tiene), reutilizando la capa de 3DS de Crispy.
-3. **La GPU para mostrar la imagen** (citro3d), como módulo compartido para todos los ports: libera el núcleo 1, que hoy compone las pantallas (~3 ms por cuadro).
-4. **Dibujo repartido entre dos núcleos**, para la alta resolución a 60 FPS (hoy 25-31 ms por cuadro, 30 FPS) en Crispy y DSDA-Doom. Opción experimental.
-5. **DSDA-Doom con la GPU de la 3DS:** un renderizador nativo con citro3d (texturas a color, luz por vértice y la niebla del hardware), como opción experimental: resolución nativa, cámara real y 3D estereoscópico.
-6. **Duke Nukem 3D:** ya hay ports (EDuke3D, dn3ds); el nuestro aplicaría el estándar. Su renderizador Polymost (OpenGL antiguo) es el candidato más realista para dibujar con la GPU.
-7. **Motor compatible con MUGEN:** MUGEN es cerrado y Ikemen GO está en Go con OpenGL, así que es otro tipo de proyecto, más grande.
+1. **Crispy Doom** ([1.0.0](https://github.com/AlexanderV387/crispy-doom/releases/tag/n3ds-v1.0.0)): Doom como era en DOS, en pantalla ancha, y **Strife**, el único juego del motor que DSDA-Doom no soporta. Ya existe [PrBoom+ para 3DS](https://db.universal-team.net/3ds/prboom) (Voxel), con OpenGL, 3D estereoscópico y mods Boom/MBF; este port apunta al estándar del proyecto (pantalla de abajo, controles) y a 60 FPS.
+2. **DSDA-Doom por software:** el port principal para mods: Doom con todos los formatos (original, Boom, MBF, MBF21, UMAPINFO, UDMF), **Heretic** y **Hexen** (con Deathkings). Reutiliza la capa de 3DS de Crispy.
+3. **La GPU de la 3DS (citro3d), parte 2D,** como módulo compartido: mostrar la imagen (libera el núcleo 1 en todos los ports) y dibujar sprites escalados, con transparencias y paletas.
+4. **Motor compatible con MUGEN,** sobre esa parte 2D: MUGEN es cerrado e Ikemen GO está en Go con OpenGL, así que es un motor propio. Meta: 60 FPS con dos personajes y efectos.
+5. **La GPU, parte 3D:** un renderizador nativo en DSDA-Doom (experimental: resolución nativa, cámara real, 3D estereoscópico) y después **Duke Nukem 3D** (su renderizador Polymost). Repartir el dibujo en dos núcleos queda como plan B para el modo por software.
+6. **PS1 con la GPU:** un renderizador con citro3d para PCSX ReARMed; cubre también los arcades basados en PS1 (Namco System 11, Capcom ZN).
+7. **N64:** primero medir si un juego recompilado con N64Recomp corre a 30 FPS en el ARM11; luego el renderizador de N64 con citro3d, para GoldenEye nativo (decompilado al 100%) o N64Recomp. Donkey Kong 64 por el camino que madure primero.
 8. **Largo plazo:**
    - **Brutal Doom:** necesita un motor de la familia ZDoom (DECORATE o ZScript; ningún port Boom/MBF lo corre). Investigar ZDoom 2.8 con Brutal Doom v20; probablemente lento en peleas grandes.
    - Return to Castle Wolfenstein y Enemy Territory.
