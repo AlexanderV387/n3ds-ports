@@ -39,8 +39,10 @@ Heretic II, Jedi Outcast, Jedi Academy, Return to Castle Wolfenstein, Serious Sa
 2. Age of Empires II
 3. Age of Mythology
 4. Juego tipo Dragon Ball 3D (no hay código ni decompilación conocidos, sería un juego propio)
-5. Donkey Kong 64
+5. Donkey Kong 64: como GoldenEye, por su decompilación (revisar en qué va), no por emulación.
 6. Dinosaur Planet
+7. **PS1 con la GPU de la 3DS.** Un renderizador con citro3d para PCSX ReARMed: hoy dibuja por software (Unai) y muchos juegos ya van a 60 en New 3DS, pero los pesados no. Lo aprendido con la GPU en DSDA-Doom sirve aquí. Cubriría también los arcades 3D basados en el hardware de PS1: Namco System 11 (Tekken, Tekken 2, Soul Edge) y Capcom ZN-1/ZN-2 (Street Fighter EX).
+8. **GoldenEye 007, nativo.** Su decompilación llegó al 100% en 2026 y ya hay ports de PC; Perfect Dark (mismo motor) está decompilado y tiene port de PC (fgsfds). El camino es un port nativo como el de Super Mario 64 en 3DS (30 fps), con los gráficos de N64 traducidos a citro3d, no un emulador: emular el N64 completo no alcanza en la 3DS.
 
 ## Lo que ya existe en 3DS
 
