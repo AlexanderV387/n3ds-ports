@@ -86,3 +86,9 @@ Para empaquetar cualquier port como `.cia` está [`tools/3ds/make-cia.sh`](tools
 ## Licencia
 
 El código propio de este repo se publica bajo licencia MIT (ver [`LICENSE`](LICENSE)). Los ports en repos separados mantienen la licencia de su proyecto base, normalmente GPL.
+
+## Créditos
+
+Dirección, diseño y pruebas en hardware: AlexanderV387. Código: escrito con Claude (IA). Motor original: el de cada port (Wolf4SDL, BStone, Crispy Doom, DSDA-Doom; ver su repo). El arte de iconos y banners se hizo con herramientas de IA.
+
+El uso de IA se dice abiertamente, como pide la comunidad (Universal-DB marca los proyectos con contenido generado por IA): lo que se publica aquí se prueba en una New 3DS real, con logs y mediciones.
