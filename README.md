@@ -4,6 +4,22 @@ Ports de juegos clásicos a la **New Nintendo 3DS**, optimizados para aprovechar
 
 El objetivo es aprender C/C++, render y optimización con poca RAM, y dejar trabajo verificable: código, mediciones de antes y después y un devlog técnico por proyecto.
 
+## Por qué existe
+
+La 3DS, a diferencia de la DS, casi no tuvo shooters ni juegos occidentales de ese estilo: la mayoría de su catálogo fueron aventuras y RPG. Y casi nada aprovechó la New 3DS: muchos juegos ni siquiera usaban el C-stick.
+
+Los ports que faltaban no salían porque, para quien podía hacerlos, no compensaban cientos de horas por juegos de nicho, y la curva de aprendizaje (C y C++ en una consola, con su GPU, su memoria y sus límites) dejaba fuera a casi todos los demás. Con la ayuda de la IA ese costo bajó lo suficiente para que este proyecto sea posible.
+
+Cada port sigue el mismo estándar, pensado para la New 3DS como debió aprovecharse:
+
+- **C-stick para la cámara** y controles reasignables;
+- **modo New 3DS siempre**: 804 MHz, caché L2 y 124 MB de RAM;
+- **60 FPS** como meta;
+- **la pantalla de abajo con uso real**: HUD, mapa y menús;
+- **`.cia` instalable**, con su icono y banner en el menú HOME.
+
+Todo se prueba en una New 3DS real, con logs y mediciones, antes de publicarse.
+
 ## Estado
 
 | Proyecto | Repo | Estado |
