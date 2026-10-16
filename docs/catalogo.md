@@ -42,6 +42,20 @@ Heretic II, Jedi Outcast, Jedi Academy, Return to Castle Wolfenstein, Serious Sa
 5. Donkey Kong 64: como GoldenEye, por su decompilación (revisar en qué va), no por emulación.
 6. Dinosaur Planet
 7. **PS1 con la GPU de la 3DS.** Un renderizador con citro3d para PCSX ReARMed: hoy dibuja por software (Unai) y muchos juegos ya van a 60 en New 3DS, pero los pesados no. Lo aprendido con la GPU en DSDA-Doom sirve aquí. Su renderizador serviría también para los arcades 3D basados en el hardware de PS1: Namco System 11 (Tekken, Tekken 2, Soul Edge) y Capcom ZN-1/ZN-2 (Street Fighter EX), aunque cada placa necesita además su propio emulador (CPU, sonido, protecciones).
+
+   **Banco de pruebas** (meta: la velocidad nativa de cada juego, 30 o 60 FPS, sin saltar cuadros; medir antes con el dibujo por software y después con la GPU). La GPU acelera el dibujo, no el cálculo (el procesador de la PS1 y su coprocesador de geometría, el GTE), así que el banco mezcla los dos tipos de carga:
+
+   | Juego | Carga | Para qué |
+   |---|---|---|
+   | Omega Boost | Dibujo: partículas y efectos, hasta 60 FPS | El mejor caso para la GPU |
+   | Tekken 3 | Dibujo y cálculo, 60 FPS | Pelea 3D; puente a los arcades System 11 |
+   | Ridge Racer Type 4 | Dibujo: degradados y transparencias | Carreras con mucha iluminación |
+   | Vagrant Story | Dibujo: transparencias especiales de la PS1 | Lo más difícil de imitar con la GPU |
+   | Crash Bandicoot 2 o 3 | Cálculo: geometría densa | Lo que la GPU no resuelve |
+   | Legacy of Kain: Soul Reaver | Cálculo y lectura continua del disco | El límite del procesador |
+   | Gran Turismo 2 | Compatibilidad | Daba problemas en 3DS |
+   | Metal Gear Solid | Las peleas del disco 2 | Bajaba en New 3DS |
+   | Castlevania: Symphony of the Night | 2D | Control: ya debería ir perfecto |
 8. **GoldenEye 007, nativo.** Su decompilación llegó al 100% en 2026 y ya hay ports de PC; Perfect Dark (mismo motor) está decompilado y tiene port de PC (fgsfds). El camino es un port nativo como el de Super Mario 64 en 3DS (30 fps), con los gráficos de N64 traducidos a citro3d, no un emulador: emular el N64 completo no alcanza en la 3DS.
 9. **N64Recomp en 3DS (experimento).** [N64Recomp](https://github.com/N64Recomp/N64Recomp) (Mr-Wiseguy, MIT) traduce la ROM completa a C de una vez, sin decompilarla a mano; en PC dibuja con RT64 (Direct3D 12/Vulkan). Para la 3DS faltaría: un renderizador de las listas de dibujo del N64 con citro3d (el mismo de GoldenEye), el audio y el ajuste por juego. Primero medir con un juego ya recompilado si el ARM11 llega a 30 fps.
 
