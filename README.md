@@ -29,18 +29,22 @@ Todo se prueba en una New 3DS real, con logs y mediciones, antes de publicarse.
 | Blake Stone (Aliens of Gold, Planet Strike) | [bstone](https://github.com/AlexanderV387/bstone) (rama `n3ds`) | [v1.0.4](https://github.com/AlexanderV387/bstone/releases/tag/n3ds-v1.0.4): 60 FPS, HUD y mapa abajo, vista 3D a pantalla completa, `.cia` |
 | Crispy Doom (Doom, Doom II, Final Doom, Freedoom) | [crispy-doom](https://github.com/AlexanderV387/crispy-doom) (rama `n3ds`) | [n3ds-v1.0.0](https://github.com/AlexanderV387/crispy-doom/releases/tag/n3ds-v1.0.0): 60 FPS (mínimo 57; Freedoom 54), barra de estado y automapa con zoom abajo, botones reasignables, giro táctil, selector de juego y mods, `.cia` ([devlog](docs/devlog/2026-10-10-crispy-doom.md)). Base de Heretic, Hexen y Strife |
 | Strife | [crispy-doom](https://github.com/AlexanderV387/crispy-doom) (rama `n3ds`, `crispy-strife`) | Probado en `.3dsx` y `.cia`: voces, inventario táctil, teclado en pantalla. Listo para publicar con Crispy Doom 1.0.1 |
-| DSDA-Doom (mods Boom/MBF/MBF21, Heretic, Hexen) | Pendiente | Siguiente: el port principal para mods, con Heretic y Hexen |
-| Duke Nukem 3D | Pendiente | Después de MUGEN y del renderizador por GPU |
-| Motor compatible con MUGEN | Pendiente | Después de DSDA-Doom y la parte 2D de la GPU |
+| DSDA-Doom (mods Boom/MBF/MBF21, DeHackEd) | [dsda-doom](https://github.com/AlexanderV387/dsda-doom) (rama `n3ds`) | En pruebas en la consola: renderizador por GPU (una capa OpenGL sobre citro3d), 60 FPS, selector de campañas y complementos con avisos de mods incompatibles, pantalla de abajo con barra de estado, mapa y botones de armas. Sin publicar |
+| Heretic | [dsda-doom](https://github.com/AlexanderV387/dsda-doom) (rama `n3ds`), su propio `.cia` | Probado en la consola: shareware, completo (5 episodios) y el `heretic.wad` del remaster de Nightdive, a 60 FPS. Falta Faith Renewed, el episodio del remaster |
+| Hexen y Deathkings of the Dark Citadel | [dsda-doom](https://github.com/AlexanderV387/dsda-doom) (rama `n3ds`), su propio `.cia` | Probado en la consola: las tres clases, hubs, salto, 60 FPS (bajón breve con el Arc of Death). Falta Vestiges of Grandeur, el episodio del remaster |
+| Duke Nukem 3D | Pendiente | Después de DSDA-Doom: su renderizador Polymost sobre la capa OpenGL de DSDA |
+| Motor compatible con MUGEN | Pendiente | Después de Duke Nukem 3D, como descanso del 3D |
 
 ## Plan
 
 1. **Crispy Doom** ([1.0.0](https://github.com/AlexanderV387/crispy-doom/releases/tag/n3ds-v1.0.0)): Doom como era en DOS, en pantalla ancha, y **Strife**, el único juego del motor que DSDA-Doom no soporta. Ya existe [PrBoom+ para 3DS](https://db.universal-team.net/3ds/prboom) (Voxel), con OpenGL, 3D estereoscópico y mods Boom/MBF; este port apunta al estándar del proyecto (pantalla de abajo, controles) y a 60 FPS.
-2. **DSDA-Doom por software:** el port principal para mods: Doom con todos los formatos (original, Boom, MBF, MBF21, UMAPINFO, UDMF), **Heretic** y **Hexen** (con Deathkings). Reutiliza la capa de 3DS de Crispy.
-3. **La GPU de la 3DS (citro3d), parte 2D,** como módulo compartido: mostrar la imagen (libera el núcleo 1 en todos los ports) y dibujar sprites escalados, con transparencias y paletas.
-4. **Motor compatible con MUGEN,** sobre esa parte 2D: MUGEN es cerrado e Ikemen GO está en Go con OpenGL, así que es un motor propio. Meta: 60 FPS con dos personajes y efectos.
-5. **La GPU, parte 3D:** un renderizador nativo en DSDA-Doom (experimental: resolución nativa, cámara real, 3D estereoscópico) y después **Duke Nukem 3D** (su renderizador Polymost). Repartir el dibujo en dos núcleos queda como plan B para el modo por software.
-6. **PS1 con la GPU:** un renderizador con citro3d para PCSX ReARMed; cubre también los arcades basados en PS1 (Namco System 11, Capcom ZN).
+2. **DSDA-Doom, Heretic y Hexen:** el port principal para mods (original, Boom, MBF, MBF21, UMAPINFO, UDMF), con renderizador por GPU: una capa que imita OpenGL sobre citro3d. Heretic y Hexen van en sus propios `.cia`. Falta:
+   - **Faith Renewed** (Heretic) y **Vestiges of Grandeur** (Hexen), los episodios del remaster de Nightdive (2025): sus monstruos, armas y objetos nuevos se programan en el motor;
+   - publicar los tres `.cia`.
+3. **Duke Nukem 3D,** sobre la capa OpenGL de DSDA-Doom: su renderizador por GPU (Polymost) está escrito para el OpenGL clásico que esa capa imita. Ya hay ports en 3DS (EDuke3D, dn3ds); este apunta al estándar del proyecto y a 60 FPS.
+4. **Motor compatible con MUGEN,** como descanso del 3D: MUGEN es cerrado e Ikemen GO está en Go con OpenGL, así que es un motor propio, con sprites escalados, transparencias y paletas por GPU. Meta: 60 FPS con dos personajes y efectos.
+5. **PS1 con la GPU:** un renderizador con citro3d para PCSX ReARMed, para los juegos pesados que hoy no llegan a 60 dibujando por software.
+6. **Arcades 3D basados en PS1** (Namco System 11: Tekken, Soul Edge; Capcom ZN: Street Fighter EX): el renderizador de PS1 sirve tal cual, pero cada placa necesita su emulador (CPU, sonido, protecciones), que PCSX ReARMed no trae.
 7. **N64:** primero medir si un juego recompilado con N64Recomp corre a 30 FPS en el ARM11; luego el renderizador de N64 con citro3d, para GoldenEye nativo (decompilado al 100%) o N64Recomp. Donkey Kong 64 por el camino que madure primero.
 8. **Largo plazo:**
    - **Brutal Doom:** necesita un motor de la familia ZDoom (DECORATE o ZScript; ningún port Boom/MBF lo corre). Investigar ZDoom 2.8 con Brutal Doom v20; probablemente lento en peleas grandes.
@@ -48,6 +52,7 @@ Todo se prueba en una New 3DS real, con logs y mediciones, antes de publicarse.
 
 Pendientes pequeños:
 
+- **Botones de armas** en la pantalla de abajo (como en DSDA-Doom) en Wolfenstein 3D, Blake Stone y Crispy Doom: tocar un número cambia a esa arma.
 - Opción **Auto Fire** (apagada por defecto) en Wolfenstein 3D y Blake Stone: que la pistola y el cuchillo disparen seguido al mantener el botón. Por defecto siguen como en DOS, un disparo por presión.
 - Publicar Crispy Doom 1.0.1 con Strife (teclado en pantalla, configuración guardada al cerrar el menú, cámara clásica o libre).
 - Publicar Wolf4SDL y BStone con el teclado en pantalla (probado en la consola).
