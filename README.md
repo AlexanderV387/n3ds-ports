@@ -52,10 +52,8 @@ Todo se prueba en una New 3DS real, con logs y mediciones, antes de publicarse.
 
 Pendientes pequeños:
 
-- **Botones de armas** en la pantalla de abajo (como en DSDA-Doom) en Wolfenstein 3D, Blake Stone y Crispy Doom: tocar un número cambia a esa arma.
+- **Botones de armas** en la pantalla de abajo (como en DSDA-Doom) en Wolfenstein 3D, Blake Stone y Crispy Doom: tocar un número cambia a esa arma. Hechos, en pruebas en la consola.
 - Opción **Auto Fire** (apagada por defecto) en Wolfenstein 3D y Blake Stone: que la pistola y el cuchillo disparen seguido al mantener el botón. Por defecto siguen como en DOS, un disparo por presión.
-- Publicar Crispy Doom 1.0.1 con Strife (teclado en pantalla, configuración guardada al cerrar el menú, cámara clásica o libre).
-- Publicar Wolf4SDL y BStone con el teclado en pantalla (probado en la consola).
 
 Todos los FPS siguen el [estándar de controles](docs/controles-fps.md): 60 FPS, HUD y mapa en la pantalla de abajo, doble stick y botones reasignables.
 
