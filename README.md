@@ -30,7 +30,7 @@ Todo se prueba en una New 3DS real, con logs y mediciones, antes de publicarse.
 | Wolfenstein 3D y Spear of Destiny | [wolf4sdl-3ds](https://github.com/AlexanderV387/wolf4sdl-3ds) (rama `n3ds`) | Terminado ([v1.6.0](https://github.com/AlexanderV387/wolf4sdl-3ds/releases/tag/v1.6.0)): 60 FPS, doble stick, giro táctil, botones reasignables, HUD y mapa abajo, teclado y botones de armas táctiles, todos los juegos en un `.cia` con menú |
 | Blake Stone (Aliens of Gold, Planet Strike) | [bstone](https://github.com/AlexanderV387/bstone) (rama `n3ds`) | [v1.2.0](https://github.com/AlexanderV387/bstone/releases/tag/n3ds-v1.2.0): 60 FPS, HUD y mapa abajo, teclado y botones de armas táctiles, vista 3D a pantalla completa, `.cia` |
 | Crispy Doom (Doom, Doom II, Final Doom, Freedoom) | [crispy-doom](https://github.com/AlexanderV387/crispy-doom) (rama `n3ds`) | [n3ds-v1.1.0](https://github.com/AlexanderV387/crispy-doom/releases/tag/n3ds-v1.1.0): 60 FPS (mínimo 57; Freedoom 54), barra de estado y automapa con zoom abajo, botones reasignables, giro táctil, selector de juego y mods, `.cia` ([devlog](docs/devlog/2026-10-10-crispy-doom.md)). Base de Heretic, Hexen y Strife |
-| Strife | [crispy-doom](https://github.com/AlexanderV387/crispy-doom) (rama `n3ds`, `crispy-strife`) | Probado en `.3dsx` y `.cia`: voces, inventario táctil, teclado en pantalla. Listo para publicar con Crispy Doom 1.0.1 |
+| Strife | [crispy-doom](https://github.com/AlexanderV387/crispy-doom) (rama `n3ds`, `crispy-strife`) | Publicado con Crispy Doom ([n3ds-v1.1.0](https://github.com/AlexanderV387/crispy-doom/releases/tag/n3ds-v1.1.0)): voces, inventario táctil, teclado en pantalla |
 | DSDA-Doom (mods Boom/MBF/MBF21, DeHackEd) | [dsda-doom](https://github.com/AlexanderV387/dsda-doom) (rama `n3ds`) | [n3ds-dsda-doom-v1.0.1](https://github.com/AlexanderV387/dsda-doom/releases/tag/n3ds-dsda-doom-v1.0.1): renderizador por GPU (una capa OpenGL sobre citro3d), 60 FPS, selector de campañas y complementos con avisos de mods incompatibles, pantalla de abajo con barra de estado, mapa y botones de armas, `.cia` y `.3dsx`. Los mods pesados (Smooth Doom) bajan en peleas grandes |
 | Heretic | [dsda-doom](https://github.com/AlexanderV387/dsda-doom) (rama `n3ds`), su propio `.cia` | [n3ds-heretic-v1.0.1](https://github.com/AlexanderV387/dsda-doom/releases/tag/n3ds-heretic-v1.0.1): shareware, completo (5 episodios) y el `heretic.wad` del remaster de Nightdive, a 60 FPS. Faith Renewed, el episodio del remaster, también; su mapa secreto (E1M9) baja a unos 10 FPS con las hordas |
 | Hexen y Deathkings of the Dark Citadel | [dsda-doom](https://github.com/AlexanderV387/dsda-doom) (rama `n3ds`), su propio `.cia` | [n3ds-hexen-v1.0.1](https://github.com/AlexanderV387/dsda-doom/releases/tag/n3ds-hexen-v1.0.1): las tres clases, hubs, salto, 60 FPS (bajón breve con el Arc of Death). Vestiges of Grandeur, el episodio del remaster, y los Enhanced Maps también; el MAP07 de Vestiges baja a unos 10 FPS con las hordas |
@@ -52,10 +52,9 @@ Todo se prueba en una New 3DS real, con logs y mediciones, antes de publicarse.
 
 Pendientes pequeños:
 
-- **Botones de armas** en la pantalla de abajo (como en DSDA-Doom) en Wolfenstein 3D, Blake Stone y Crispy Doom: tocar un número cambia a esa arma. Hechos, en pruebas en la consola.
 - Opción **Auto Fire** (apagada por defecto) en Wolfenstein 3D y Blake Stone: que la pistola y el cuchillo disparen seguido al mantener el botón. Por defecto siguen como en DOS, un disparo por presión.
 
-Todos los FPS siguen el [estándar de controles](docs/controles-fps.md): 60 FPS, HUD y mapa en la pantalla de abajo, doble stick y botones reasignables.
+Todos los FPS siguen el [estándar de controles](docs/controles-fps.md): 60 FPS, HUD y mapa en la pantalla de abajo (el mapa se puede ocultar), doble stick, cámara táctil, botones reasignables, teclado y botones de armas táctiles, y ajustes guardados al cerrar el menú.
 
 El catálogo completo, con 33 ideas en 4 niveles, está en [`docs/catalogo.md`](docs/catalogo.md).
 

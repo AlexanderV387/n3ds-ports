@@ -22,7 +22,8 @@ Lo que definimos al portar Wolfenstein 3D (wolf4sdl-3ds, rama `n3ds`) y que se a
 - Circle Pad: avanzar/retroceder y moverse de lado (*strafe*).
 - C-stick: girar la cámara.
 - Modo clásico opcional: el Circle Pad avanza y gira, como el original.
-- Giro con la pantalla táctil (opcional, para 3DS sin C-stick): deslizar a izquierda o derecha gira, con su propia velocidad (1-10). Se suma **después** del tope de giro por cuadro del motor: ese tope es para teclas y sticks y cortaba los deslizamientos rápidos. Si el motor tiene mouse (Doom), mandarlo como movimiento de mouse: ya se aplica cada cuadro y sin tope. Con esta opción activa, el toque no apaga la pantalla de abajo durante la partida, y un deslizamiento que empieza en los botones de la pantalla de abajo (el zoom del mapa) no gira: los dos conviven.
+- **Mirar arriba y abajo (eje Y), si el motor lo permite:** una opción del menú ("Camera: Classic / Free Look" en Crispy Doom). Al activarla, el C-stick y el giro táctil también miran arriba y abajo; desactivada, solo giran. Si el original ya miraba siempre arriba y abajo (Strife), siempre lo hacen.
+- **La pantalla táctil como cámara** (opción "Touch turning", para 3DS sin C-stick): deslizar a izquierda o derecha gira, con su propia velocidad (1-10). Se suma **después** del tope de giro por cuadro del motor: ese tope es para teclas y sticks y cortaba los deslizamientos rápidos. Si el motor tiene mouse (Doom), mandarlo como movimiento de mouse: ya se aplica cada cuadro y sin tope. Con esta opción activa, el toque no apaga la pantalla de abajo durante la partida, y un deslizamiento que empieza en los botones de la pantalla de abajo (el zoom del mapa) no gira: los dos conviven.
 
 **Velocidad analógica:**
 - La inclinación del stick es proporcional: a medio camino, más lento.
@@ -64,12 +65,16 @@ Predeterminados de Wolfenstein (R dispara, como en la mayoría de los FPS):
 
 - Pantalla de arriba: el juego.
 - Pantalla de abajo: **estadísticas (HUD) y mapa juntos.** Es la filosofía de todos los FPS de este tipo:
-  - Con la vista a pantalla completa, el HUD (vida, munición, cara, llaves) y el mapa comparten la pantalla de abajo. Estadísticas arriba del mapa por defecto; una opción del menú las pone abajo.
-  - Con una vista más pequeña, el HUD vuelve a la pantalla de arriba como en el original y el mapa ocupa toda la de abajo.
-  - El mapa se ve desde el inicio de la partida, con cualquier tamaño de vista; solo lo esconde su opción del menú. Sin mapa, el HUD puede ir arriba, en medio o abajo de la pantalla inferior.
+  - Con la vista a pantalla completa, el HUD (vida, munición, cara, llaves) y el mapa comparten la pantalla de abajo. Estadísticas arriba del mapa por defecto; una opción del menú las pone abajo. Solo arriba o abajo: la posición en medio se quitó.
+  - **Barras de estado arriba, lo táctil abajo:** con una vista más pequeña (el tamaño de pantalla del propio juego), las barras de estado vuelven a la pantalla de arriba como en el original y la de abajo queda para el mapa y lo táctil (teclado, botones de armas, inventario). El HUD pasa solo a la pantalla de abajo al poner la vista a tamaño máximo: no hace falta una opción aparte para eso. Si el juego no tiene tamaños de vista (Blake Stone), el HUD va siempre abajo.
+  - El mapa se ve desde el inicio de la partida, con cualquier tamaño de vista, y **se puede ocultar** con su opción del menú. Sin mapa, el HUD va arriba o abajo de la pantalla inferior.
   - El mapa muestra solo lo que el jugador ya vio, centrado en él, con su dirección: pisos, paredes y puertas en colores distintos. Botones **+** y **−** en una esquina para el zoom (un toque acerca un cuarto; mantenerlo sigue acercando), guardado en la configuración. Si el juego trae su propio mapa (Blake Stone, el automapa de Doom), se usa ese; si no lo trae (Wolfenstein), se agrega uno como extra opcional, a partir de lo que el motor marca como visible en cada cuadro.
   - En Wolfenstein el HUD se dibuja cada cuadro con las funciones originales de la barra de estado en una superficie aparte; en Blake Stone se copian 1:1 las filas de la interfaz de 320x200. En Doom, la barra y el automapa se dibujan con sus propias funciones en otro búfer, guardando y restaurando el estado del automapa.
   - La pantalla de abajo basta a 30 cuadros por segundo.
+- **Botones de armas** (opción del menú, apagada por defecto): una fila de números al pie de la pantalla de abajo, uno por arma (4 en Wolfenstein, 5 o 7 en Blake Stone, los de Doom). Las armas que tienes en blanco, las que no en gris oscuro, la que llevas en la mano sobre fondo gris. Un toque mantiene la tecla de ese número mientras el dedo está encima, igual que el teclado del PC; el mapa se acorta para dejarle sitio. Un toque que empieza en la fila no gira la cámara. Comprobar que el juego lea de verdad esas teclas: el port original de Wolfenstein tenía comentada la lectura del teclado y los números no hacían nada.
+- **Teclado en pantalla:** una pestaña en la esquina superior izquierda de la pantalla de abajo lo abre; se abre solo cuando el juego pide texto (nombre de la partida, récord, nombre del personaje). Las teclas llegan como las del PC, así que los trucos y las teclas de depuración funcionan. **HOLD** deja pulsadas las teclas que se tocan, para combinaciones (M-L-I en Wolfenstein, TAB-G-F10 en Spear of Destiny); **CLOSE** lo esconde. Abierto, ocupa toda la pantalla de abajo y la mantiene encendida.
+- **Inventario táctil** en los juegos que lo tienen (por ahora Strife): los objetos en la pantalla de abajo; un toque elige el objeto y otro toque lo usa.
+- El teclado, los botones de armas y el inventario son módulos compartidos entre ports (`n3ds_keyboard`, `n3ds_weapons`): el mismo código y el mismo aspecto en todos.
 - Todos los caminos que muestran un cuadro deben actualizar la pantalla de abajo (en Wolfenstein, `N3DS_Flip` en lugar de `SDL_Flip`). La partida usaba su propio blit + flip y el HUD se quedaba congelado.
 - Un toque en la pantalla táctil apaga o enciende la de abajo (ahorra batería), en cualquier momento: título, menús y juego. Con el HUD o el mapa visibles el toque no la apaga, y si estaba apagada se enciende sola al aparecer.
 - **Abrir `gsp::Lcd` solo alrededor de cada cambio de brillo** (`gspLcdInit` → `GSPLCD_PowerOn/OffBacklight` → `gspLcdExit`). Dejar la sesión abierta todo el juego congeló la consola al presionar HOME en Wolfenstein: el menú HOME necesita ese mismo servicio.
@@ -93,7 +98,9 @@ Predeterminados de Wolfenstein (R dispara, como en la mayoría de los FPS):
 
 ## Configuración guardada
 
-- Asignaciones, doble stick, modo de correr, posición del HUD y giro táctil (con su velocidad) se guardan en el archivo de configuración del juego.
+- Asignaciones, doble stick, modo de correr, cámara, posición del HUD, mapa, botones de armas y giro táctil (con su velocidad) se guardan en el archivo de configuración del juego.
+- **Guardar al cerrar un menú,** si algo cambió (en el motor, una marca que se enciende al cambiar un ajuste o una asignación). Así un cuelgue o una batería agotada no pierden los ajustes. Sin cambios no se escribe nada en la SD.
+- Un ajuste que se quita (la posición del HUD en medio, el HUD como en PC de Blake Stone) se lee igual de las configuraciones viejas y pasa a un valor válido.
 - Se agregan al final del formato original, detrás de un número mágico (`0x3d50` en Wolfenstein), para que los archivos de configuración viejos sigan cargando.
 - Validar al leer: valores fuera de rango vuelven al predeterminado.
 
@@ -114,4 +121,6 @@ Predeterminados de Wolfenstein (R dispara, como en la mayoría de los FPS):
 - Un `.cia` arranca **sin argumentos** (`argc` = 0); un `.3dsx` recibe su ruta como `argv[0]`. Si el port agrega opciones a la línea de comandos (por ejemplo, el juego elegido en un menú), primero hay que poner un nombre de programa. En Blake Stone, la opción se perdía y el `.cia` fallaba aunque el `.3dsx` funcionaba: probar siempre los dos.
 
 - `.3dsx` y `.cia` en cada compilación (`tools/3ds/make-cia.sh`), con 804 MHz, caché L2 y 124 MB activados.
+- README de cada port: aviso de que es solo para New 3DS y New 2DS XL (no se pensó ni se probó en la Old 3DS), tono neutro, y los créditos (quién hizo qué, incluido lo hecho con herramientas de IA) solo ahí, no en el selector ni en el juego.
+- Publicar con un commit cuyo mensaje lleve `[release]`, y solo después de probar el `.cia` en la consola.
 - Datos del juego en `/3ds/<port>/<juego>/`, una carpeta por juego para no mezclar configuraciones ni partidas guardadas.
