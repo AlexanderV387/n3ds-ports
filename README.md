@@ -52,6 +52,9 @@ Todo se prueba en una New 3DS real, con logs y mediciones, antes de publicarse.
 
 Pendientes pequeños:
 
+- **Opción clásica** (apagada por defecto) para dejar las barras de estado en la pantalla de arriba, según el estándar: volver a ponerla en Blake Stone (se quitó en 1.2.0) y agregarla en Wolfenstein 3D, Crispy Doom y DSDA-Doom.
+- **Crispy Doom:** quitar la posición en medio de la barra de estado (solo arriba o abajo), como en Wolfenstein 3D.
+- **Inventario táctil** en Heretic y Hexen (DSDA-Doom), como en Strife.
 - Opción **Auto Fire** (apagada por defecto) en Wolfenstein 3D y Blake Stone: que la pistola y el cuchillo disparen seguido al mantener el botón. Por defecto siguen como en DOS, un disparo por presión.
 
 Todos los FPS siguen el [estándar de controles](docs/controles-fps.md): 60 FPS, HUD y mapa en la pantalla de abajo (el mapa se puede ocultar), doble stick, cámara táctil, botones reasignables, teclado y botones de armas táctiles, y ajustes guardados al cerrar el menú.
