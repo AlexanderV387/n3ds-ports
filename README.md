@@ -24,6 +24,8 @@ Todo se prueba en una New 3DS real, con logs y mediciones, antes de publicarse.
 
 ## Estado
 
+Cómo instalar cada port, las rutas en la SD, los archivos del juego que hacen falta y los que se han probado: [`docs/instalacion.md`](docs/instalacion.md).
+
 | Proyecto | Repo | Estado |
 |---|---|---|
 | Hola mundo (devkitPro + SDL2) | [`hello-world/`](hello-world/) | Funciona en New 3DS: 59,8 FPS estables con vsync |
@@ -54,6 +56,7 @@ Pendientes pequeños:
 
 - **Opción clásica** (apagada por defecto) para dejar las barras de estado en la pantalla de arriba, según el estándar: volver a ponerla en Blake Stone (se quitó en 1.2.0) y agregarla en Wolfenstein 3D, Crispy Doom y DSDA-Doom.
 - **Crispy Doom:** quitar la posición en medio de la barra de estado (solo arriba o abajo), como en Wolfenstein 3D.
+- **Duke Nukem 3D:** guardar partida es muy lento (sin investigar).
 - **Inventario táctil** en Heretic y Hexen (DSDA-Doom), como en Strife.
 - Opción **Auto Fire** (apagada por defecto) en Wolfenstein 3D y Blake Stone: que la pistola y el cuchillo disparen seguido al mantener el botón. Por defecto siguen como en DOS, un disparo por presión.
 
@@ -72,6 +75,7 @@ docs/
   rendimiento.md    mediciones en hardware real, antes y después
   aprendizaje.md    plan de aprendizaje y cómo comprobar cada paso
   controles-fps.md  estándar de controles para todos los FPS del proyecto
+  instalacion.md    instalación, rutas y archivos probados de cada port
   devlog/           una entrada por avance importante
 hello-world/        primer programa: toolchain, bucle principal, entrada y FPS
 tools/3ds/          empaquetado .cia reutilizable para todos los ports
