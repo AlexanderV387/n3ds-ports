@@ -47,11 +47,12 @@ Cómo instalar cada port, las rutas en la SD, los archivos del juego que hacen f
 4. **Motor compatible con MUGEN,** al terminar Duke ([investigación](docs/investigacion-mugen.md): portar Dolmexica Infinite, con Ikemen GO como referencia), como descanso del 3D: MUGEN es cerrado e Ikemen GO está en Go con OpenGL, así que es un motor propio, con sprites escalados, transparencias y paletas por GPU. Meta: 60 FPS con dos personajes y efectos.
 5. **Blood, Redneck Rampage, Shadow Warrior y Exhumed,** al terminar MUGEN: los juegos del motor Build que quedaron en pausa (ver el punto 3).
 6. **Motor de beat 'em ups** (probablemente OpenBOR), después de los juegos Build, con Final Fight Ladies como juego de prueba. Antes, confirmar en qué motor está hecho y si ya hay un OpenBOR para 3DS. Como siempre, se publica solo el motor; cada persona pone el juego.
-7. **PS1 con la GPU:** un renderizador con citro3d para PCSX ReARMed, para los juegos pesados que hoy no llegan a 60 dibujando por software.
-8. **Arcades 3D basados en PS1** (Namco System 11: Tekken, Soul Edge; Capcom ZN: Street Fighter EX): el renderizador de PS1 sirve tal cual, pero cada placa necesita su emulador (CPU, sonido, protecciones), que PCSX ReARMed no trae.
-9. **N64:** primero medir si un juego recompilado con N64Recomp corre a 30 FPS en el ARM11; luego el renderizador de N64 con citro3d, para GoldenEye nativo (decompilado al 100%) o N64Recomp. Donkey Kong 64 por el camino que madure primero.
-10. **Largo plazo:**
-   - **Brutal Doom:** necesita un motor de la familia ZDoom (DECORATE o ZScript; ningún port Boom/MBF lo corre). Investigar ZDoom 2.8 con Brutal Doom v20; probablemente lento en peleas grandes.
+7. **Serious Sam** (The First Encounter y The Second Encounter), después del motor de beat 'em ups: Croteam liberó el Serious Engine 1 (GPL, 2016). Retos: necesita OpenGL (la capa sobre citro3d de DSDA-Doom y Duke), tiene partes en ensamblador x86 y usa mapas abiertos con muchos enemigos para 124 MB. Primero arrancar y medir.
+8. **Brutal Doom,** en lugar de Postal 2. Postal 2 usa Unreal Engine 2, cuyo código no es público, así que no se puede portar. Postal 1 sí está liberado (GPL), si interesa como alternativa. Brutal Doom necesita un motor de la familia ZDoom (DECORATE o ZScript; ningún port Boom/MBF lo corre): investigar ZDoom 2.8, LZDoom o Zandronum con Brutal Doom v20b, medir memoria y FPS en peleas grandes y limitar sangre y cadáveres si hace falta.
+9. **PS1 con la GPU:** un renderizador con citro3d para PCSX ReARMed, para los juegos pesados que hoy no llegan a 60 dibujando por software.
+10. **Arcades 3D basados en PS1** (Namco System 11: Tekken, Soul Edge; Capcom ZN: Street Fighter EX): el renderizador de PS1 sirve tal cual, pero cada placa necesita su emulador (CPU, sonido, protecciones), que PCSX ReARMed no trae.
+11. **N64:** primero medir si un juego recompilado con N64Recomp corre a 30 FPS en el ARM11; luego el renderizador de N64 con citro3d, para GoldenEye nativo (decompilado al 100%) o N64Recomp. Donkey Kong 64 por el camino que madure primero.
+12. **Largo plazo:**
    - Return to Castle Wolfenstein y Enemy Territory.
 
 Pendientes pequeños:
