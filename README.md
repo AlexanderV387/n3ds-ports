@@ -66,6 +66,7 @@ Pendientes pequeños:
   - apuntar con el giroscopio (opcional);
   - un selector de mods con interfaz gráfica, no solo texto;
   - más opciones al asignar botones: doble toque, mantener y un botón de modo (shift) que cambie lo que hacen los demás.
+  - **DSDA-Doom:** avisar si la carpeta de mods está vacía; un aviso más claro para los mods de GZDoom ("no funciona aquí"); ocultar el inventario de Heretic y Hexen en la pantalla de botones al jugar Doom.
 - **Inventario táctil** en Heretic y Hexen (DSDA-Doom), como en Strife.
 - Opción **Auto Fire** (apagada por defecto) en Wolfenstein 3D y Blake Stone: que la pistola y el cuchillo disparen seguido al mantener el botón. Por defecto siguen como en DOS, un disparo por presión.
 
