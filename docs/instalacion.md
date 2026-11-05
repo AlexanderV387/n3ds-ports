@@ -97,7 +97,9 @@ Release: [dsda-doom](https://github.com/AlexanderV387/dsda-doom/releases). Son t
 | `heretic.cia` | `/3ds/heretic/` | `/3ds/heretic/mods/` |
 | `hexen.cia` | `/3ds/hexen/` | `/3ds/hexen/mods/` |
 
-Los mods pueden ser `.wad`, `.deh`, `.bex` o `.zip`. El `.cia` (o `.3dsx`) de DSDA-Doom también juega Heretic y Hexen si sus archivos están en `/3ds/dsda-doom/`.
+Los mods pueden ser `.wad`, `.deh`, `.bex` o `.zip`. El `.cia` (o `.3dsx`) de DSDA-Doom también juega Heretic y Hexen si sus archivos están en `/3ds/dsda-doom/`; ahí sus mods van en `/3ds/dsda-doom/mods/heretic/` y `/3ds/dsda-doom/mods/hexen/`.
+
+Si la carpeta de mods está vacía (o los mods están en otra carpeta), no aparece la pantalla de mods: después de elegir el juego, arranca directo.
 
 **DSDA-Doom:** los mismos IWADs que Crispy Doom (tabla de arriba), más mods Boom, MBF, MBF21 y UMAPINFO.
 
