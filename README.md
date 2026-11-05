@@ -55,12 +55,17 @@ Cómo instalar cada port, las rutas en la SD, los archivos del juego que hacen f
 12. **N64:** primero medir si un juego recompilado con N64Recomp corre a 30 FPS en el ARM11; luego el renderizador de N64 con citro3d, para GoldenEye nativo (decompilado al 100%) o N64Recomp. Donkey Kong 64 por el camino que madure primero.
 13. **Largo plazo:**
    - Return to Castle Wolfenstein y Enemy Territory.
+   - **Sonic Robo Blast 2** (versión 2.2): motor derivado de Doom con renderizador OpenGL. Ya hay un port viejo para 3DS (derrekr/srb2_3ds, de la 2.1); revisarlo antes de empezar.
 
 Pendientes pequeños:
 
 - **Opción clásica** (apagada por defecto) para dejar las barras de estado en la pantalla de arriba, según el estándar: volver a ponerla en Blake Stone (se quitó en 1.2.0) y agregarla en Wolfenstein 3D, Crispy Doom y DSDA-Doom.
 - **Crispy Doom:** quitar la posición en medio de la barra de estado (solo arriba o abajo), como en Wolfenstein 3D.
 - **Duke Nukem 3D:** guardar partida es muy lento (sin investigar).
+- **Ideas de la comunidad (Reddit) para DSDA-Doom, y luego los demás FPS:**
+  - apuntar con el giroscopio (opcional);
+  - un selector de mods con interfaz gráfica, no solo texto;
+  - más opciones al asignar botones: doble toque, mantener y un botón de modo (shift) que cambie lo que hacen los demás.
 - **Inventario táctil** en Heretic y Hexen (DSDA-Doom), como en Strife.
 - Opción **Auto Fire** (apagada por defecto) en Wolfenstein 3D y Blake Stone: que la pistola y el cuchillo disparen seguido al mantener el botón. Por defecto siguen como en DOS, un disparo por presión.
 
