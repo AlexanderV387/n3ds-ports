@@ -62,7 +62,7 @@ Pendientes pequeños:
 - **Opción clásica** (apagada por defecto) para dejar las barras de estado en la pantalla de arriba, según el estándar: volver a ponerla en Blake Stone (se quitó en 1.2.0) y agregarla en Wolfenstein 3D, Crispy Doom y DSDA-Doom.
 - **Crispy Doom:** quitar la posición en medio de la barra de estado (solo arriba o abajo), como en Wolfenstein 3D.
 - **Duke Nukem 3D:** guardar partida es muy lento (sin investigar).
-- **Ideas de la comunidad (Reddit) para DSDA-Doom, y luego los demás FPS:**
+- **Ideas de la comunidad (Reddit) para todos los FPS** (empezando por DSDA-Doom; ya en el [estándar de controles](docs/controles-fps.md)):
   - apuntar con el giroscopio (opcional);
   - un selector de mods con interfaz gráfica, no solo texto;
   - más opciones al asignar botones: doble toque, mantener y un botón de modo (shift) que cambie lo que hacen los demás.

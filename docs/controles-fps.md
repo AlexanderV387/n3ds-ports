@@ -24,6 +24,7 @@ Lo que definimos al portar Wolfenstein 3D (wolf4sdl-3ds, rama `n3ds`) y que se a
 - Modo clásico opcional: el Circle Pad avanza y gira, como el original.
 - **Mirar arriba y abajo (eje Y), si el motor lo permite:** una opción del menú ("Camera: Classic / Free Look" en Crispy Doom). Al activarla, el C-stick y el giro táctil también miran arriba y abajo; desactivada, solo giran. Si el original ya miraba siempre arriba y abajo (Strife), siempre lo hacen.
 - **La pantalla táctil como cámara** (opción "Touch turning", para 3DS sin C-stick): deslizar a izquierda o derecha gira, con su propia velocidad (1-10). Se suma **después** del tope de giro por cuadro del motor: ese tope es para teclas y sticks y cortaba los deslizamientos rápidos. Si el motor tiene mouse (Doom), mandarlo como movimiento de mouse: ya se aplica cada cuadro y sin tope. Con esta opción activa, el toque no apaga la pantalla de abajo durante la partida, y un deslizamiento que empieza en los botones de la pantalla de abajo (el zoom del mapa) no gira: los dos conviven.
+- **Apuntar con el giroscopio** (opción, apagada por defecto; pedido de la comunidad, pendiente en todos los FPS): inclinar la consola gira y, si el motor lo permite, mira arriba y abajo, con su propia velocidad. Se suma al C-stick, como el giro táctil. Conviene un botón para pausarlo o recentrarlo mientras se mantiene presionado.
 
 **Velocidad analógica:**
 - La inclinación del stick es proporcional: a medio camino, más lento.
@@ -48,6 +49,8 @@ Aplica igual al Circle Pad y a la cruceta.
 - START y la cruceta no se reasignan: START es el menú, la cruceta mueve.
 - El menú muestra nombres de botones de 3DS, nunca teclas de PC, mouse ni joystick.
 - Si el motor permite un solo botón por acción (Doom: `joyb_fire`…), cada acción se vuelve un **botón virtual**: su bit se enciende si se presiona cualquiera de los botones de 3DS asignados a ella. A, B y START se mandan aparte como ellos mismos, para que los menús usen siempre A/B aunque se reasignen.
+- **Asignación avanzada** (pendiente en todos los FPS; pedido de la comunidad): además de presionar, una acción puede ir a **doble toque** o a **mantener** un botón, y un **botón de modo (shift)** cambia lo que hacen los demás mientras se mantiene. Así caben más acciones en los botones de la 3DS.
+- **Selector de juegos y mods con interfaz gráfica** en la pantalla táctil (pendiente; hoy es de texto), para los ports que eligen juego o mods al arrancar.
 - Quitar atajos del motor que estorban con mando, como el "doble toque de strafe = usar" de Doom (L abría puertas).
 
 Predeterminados de Wolfenstein (R dispara, como en la mayoría de los FPS):
