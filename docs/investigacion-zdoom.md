@@ -94,3 +94,51 @@ Compilar el fork de tinaut1986 tal cual, cambiar los datos fijos de Legend of Do
 - qué se ve mal con el renderizador por GPU (portales, cielos, texturas).
 
 Con esos números se decide si seguir con 4.7.1, cuánto falta en la GPU y qué hay que sacrificar.
+
+## Actualizar el motor a 4.13 o más (meta: H-Doom)
+
+**Prueba en consola (noviembre 2026).** La base de tinaut1986, GZDoom 4.7.1, ya arranca con `doom2.wad` desde la SD en una New 3DS. H-Doom (techdemo 1.1) se cierra al compilar su DECORATE: `missilechancemult is an unknown actor property`. Esa propiedad no existe en GZDoom 4.7.1 ni hasta la 4.12; aparece en la **4.14** (revisado en el código de cada versión). H-Doom pide un motor de 2024 o más nuevo.
+
+### El problema de actualizar GZDoom
+
+- GZDoom **quitó el backend "poly"** (el renderizador por CPU) en la **4.9**. Ya no está en 4.9, 4.10, 4.11, 4.12 ni 4.14.
+- La base de la 3DS depende de ese backend:
+  - el renderizador por software dibuja en el lienzo de `PolyFrameBuffer`;
+  - el 2D (menús, HUD) se dibuja con sus hilos;
+  - el presentador al PICA200 vive ahí.
+- En GZDoom 4.14 habría que escribir un backend de video nuevo para la 3DS (2D por citro3d) o volver a meter el backend poly a mano.
+
+### La solución: LZDoom 4.14
+
+- [LZDoom](https://github.com/drfrag666/lzdoom) (rama `l4.14dev`, último commit en noviembre de 2026) es la versión "legacy" de GZDoom: sigue las funciones de GZDoom 4.14 y **conserva el renderizador softpoly** de Magnus Norddahl (dpJudas).
+- Su ZScript es de la versión **4.14.2** y ya trae `MissileChanceMult` (comprobado en `thingdef_properties.cpp`).
+- C++17, CMake 3.16, ZMusic aparte (como ahora). No trae ZWidget (el lanzador de escritorio de GZDoom 4.13+).
+- Dependencias nuevas, todas en C portable o desactivables: libwebp, discord-rpc (se desactiva) y libvpx (opcional, para videos).
+- El ZScript de `gzdoom.pk3` pasa de 2,5 a 2,7 MB: unos MB más de memoria al compilar. La New 3DS tiene margen; la Old 3DS no es meta.
+- Licencia GPL v3, igual que ahora.
+
+### Cuánto trabajo es
+
+Lo que la base de la 3DS cambió respecto a GZDoom 4.7.1 (`git diff 2ec32d1`):
+
+- **La capa 3DS propia** (`src/common/platform/3ds/`, 46 archivos, unas 27.000 líneas): se lleva casi tal cual. Es entrada, diagnósticos, pantalla de abajo, presentador y renderizador del mundo por GPU.
+- **Cambios dentro del motor: 154 archivos**, unas 5.000 líneas sin contar `stb_vorbis`. Los más grandes:
+  - `d_main.cpp`, `i_main.cpp`, `sdlglvideo.cpp`;
+  - el renderizador por software (`r_opaque_pass.cpp`, `r_skyplane.cpp`, `r_scene.cpp`, `r_line.cpp`, `r_sprite.cpp`);
+  - el backend poly (`poly_framebuffer.cpp`, `poly_hwtexture.cpp`);
+  - memoria (`m_alloc.cpp`, `tarray.h`, `udmf.cpp`);
+  - el sonido (`oalsound.cpp`).
+
+**Método:** el de las actualizaciones de librerías de terceros.
+
+1. Una rama desde la base GZDoom 4.7.1 (`2ec32d1`).
+2. Un commit que reemplaza el motor por LZDoom 4.14.
+3. Hacer merge de nuestra rama `n3ds` encima. Git combina solo lo que no choca; los conflictos (los archivos de la lista) se resuelven a mano, uno por uno.
+4. Primero que compile y arranque con Doom II; después revisar el renderizador del mundo por GPU (sus hooks en el renderizador por software) y la memoria.
+
+**Estimación:** varias sesiones de trabajo. Lo más delicado es el renderizador por software y el backend poly, que cambiaron en cuatro años de GZDoom. No hay que escribir un backend nuevo.
+
+### Otros pendientes vistos con H-Doom
+
+- **Carga muy lenta.** El gestor de texturas tardó unos 2 min 45 s revisando las imágenes de H-Doom desde la SD; el arranque total, más de 3 minutos. A optimizar después, por ejemplo con un índice guardado la primera vez.
+- Restaurados los actores de Heretic, Hexen, Strife y Chex, que Legend of Doom había quitado para ahorrar memoria en la Old 3DS.
