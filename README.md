@@ -24,6 +24,8 @@ Todo se prueba en una New 3DS real, con logs y mediciones, antes de publicarse.
 
 ## Estado
 
+**Para retomar el proyecto:** [`docs/TRASPASO.md`](docs/TRASPASO.md) junta todo: repos, cómo compilar, estado de cada port, lo que está a medio hacer, el roadmap y lo aprendido.
+
 Cómo instalar cada port, las rutas en la SD, los archivos del juego que hacen falta y los que se han probado: [`docs/instalacion.md`](docs/instalacion.md).
 
 | Proyecto | Repo | Estado |
@@ -86,6 +88,7 @@ docs/
   aprendizaje.md    plan de aprendizaje y cómo comprobar cada paso
   controles-fps.md  estándar de controles para todos los FPS del proyecto
   instalacion.md    instalación, rutas y archivos probados de cada port
+  TRASPASO.md       estado completo para retomar el proyecto en otro entorno
   devlog/           una entrada por avance importante
 hello-world/        primer programa: toolchain, bucle principal, entrada y FPS
 tools/3ds/          empaquetado .cia reutilizable para todos los ports
