@@ -291,3 +291,171 @@ En [`controles-fps.md`](controles-fps.md):
 3. Para UZDoom: `git clone https://github.com/AlexanderV387/gzdoom-3ds`, `git checkout uzdoom-3ds` y `platform/3ds/build.sh`.
 4. Abrir Claude Code dentro del repo y pedirle que lea este archivo y el README de `platform/3ds/`. Así no hace falta repetir el contexto.
 5. **Ahorro de tokens:** compilar y probar sin la IA, y llamarla con el log y la foto ya listos, una tarea concreta por sesión.
+
+---
+
+## 11. Para la IA que retome el proyecto: dónde quedó y cómo se trabajaba
+
+Esta sección es para la próxima IA (Catequilla u otra). Junta el punto exacto donde quedó el trabajo con Claude, la metodología que funcionó, los prompts para arrancar y lo que hay que hacer primero.
+
+### 11.1 Punto exacto donde quedó (6 de noviembre de 2026)
+
+| Repo | Rama | Último commit | Qué hay ahí |
+|---|---|---|---|
+| gzdoom-3ds | `uzdoom-3ds` | `50bf5d04a` "3DS: build script and notes" (antes: `5511d6bb6`, el arreglo de la prueba 8) | UZDoom con backend citro3d. **Aquí se estaba trabajando.** |
+| gzdoom-3ds | `n3ds` | `8c46f24c4` "Engine data inside the 3DSX..." | GZDoom 4.7.1; jugó MAP01 de Doom II en consola |
+| dolmexicainfinite | `n3ds` | `6d04d18` "Auto-turn as MUGEN; sprite priorities past 10..." | MUGEN; es la prueba 71 |
+| prism | `n3ds` | `ac46ada` "3DS simulation: pictures of chosen frames" | Librería de Dolmexica y simulador |
+| n3ds-ports | `main` | este traspaso | Documentación |
+
+**La tarea en curso:** UZDoom, prueba 8 (`uzdoom-prueba08.3dsx`). Se esperaba ver por primera vez la pantalla de título dibujada por la GPU. El dueño dijo "no funcionó todavía", sin decir si se cerró o quedó en negro, y **no llegó el log**. Lo primero es pedir:
+
+1. `sdmc:/3ds/gzdoom/log.txt` (y `fatal.log` si existe);
+2. una foto de las dos pantallas;
+3. si hay volcado de Luma (`/luma/dumps/arm11/`), el `.dmp` más reciente.
+
+**El `.elf` de la prueba 8** (`uzdoom-prueba08.elf`, md5 `01872fd02b49cbc65ba9c764ac6c18fd`) se le entregó al dueño comprimido (`uzdoom-prueba08.elf.xz`), porque el entorno en la nube donde se compiló se pierde. Sin ese archivo no se pueden traducir las direcciones del log o del volcado de la prueba 8. Si se perdió: recompilar el mismo commit no garantiza las mismas direcciones, así que conviene hacer una prueba 9 con más diagnóstico (11.5) en lugar de insistir con la 8.
+
+### 11.2 El ciclo de trabajo que funcionó
+
+1. **El dueño prueba en la consola** y avisa: "salió esto, ya te mando el log". **Desde ese momento no se toca nada** hasta que llega el log, aunque la foto ya parezca explicar el fallo.
+2. **Leer el log completo**, no solo el final:
+   - las últimas líneas dicen dónde se paró;
+   - la columna de memoria (cada línea empieza con `[KB en uso]`) dice si se estaba agotando;
+   - las líneas de reservas grandes traen la traza de quién las pidió.
+3. **Encontrar la causa con pruebas, no con intuición:**
+   - `addr2line` sobre el `.elf` de esa misma prueba;
+   - buscar en el código del motor el mensaje del log;
+   - comparar con la referencia: el motor en PC, MUGEN 1.0/1.1, el render por software.
+
+   Antes de cambiar nada, decir la hipótesis y la evidencia.
+4. **Arreglar el motor, nunca el contenido.**
+   - Cada cambio va protegido para la 3DS (`#ifdef __3DS__` o en `platform/3ds/`), para que en PC no cambie nada.
+   - **Varios arreglos por prueba.**
+   - **Agregar diagnóstico para el siguiente fallo probable**, para que, si algo falla, el próximo log ya diga por qué. Así salieron las fuentes TrueType, las hex y la lista 2D en una prueba cada una.
+5. **Compilar y numerar:**
+   - `<port>-pruebaNN.3dsx` (solo el 3dsx cuando los datos van en la RomFS: no hace falta mandar un zip);
+   - **guardar `<port>-pruebaNN.elf` fuera del entorno temporal.**
+6. **Explicar al dueño en español sencillo:**
+   - qué falló;
+   - qué se cambió;
+   - qué tiene que mirar en la prueba;
+   - y terminar con 1 o 2 preguntas.
+7. **Commit y push** a la rama de trabajo:
+   - mensaje en inglés con las líneas de atribución;
+   - la documentación se actualiza en el mismo cambio (README de `platform/3ds/`, este traspaso);
+   - **nunca `[release]` sin que el dueño lo confirme.**
+
+### 11.3 Prompts para arrancar con la nueva IA
+
+**Al empezar una sesión:**
+> Lee `n3ds-ports/docs/TRASPASO.md` (todo, en especial la sección 11) y `gzdoom-3ds/platform/3ds/README.md` en la rama `uzdoom-3ds`. Háblame en español y escribe el código y los commits en inglés. No cambies nada después de una prueba hasta que te mande el log. Dime en qué punto estamos y qué me vas a pedir primero.
+
+**Al reportar una prueba:**
+> Prueba NN de <port>. Pasó esto: <qué se ve, en qué momento, si se cerró o quedó congelado>. Adjunto `log.txt`, `fatal.log` (si hay), foto de las dos pantallas y el `.dmp` de Luma (si hay). Busca la causa con el log antes de proponer cambios; si necesitas traducir direcciones usa el `.elf` de esa prueba.
+
+**Al pedir algo nuevo:**
+> Quiero <función>. Antes de programar, dime cómo lo hacen el motor original o los otros ports del proyecto, qué archivos tocarías y cómo lo voy a probar en la consola.
+
+**Al cerrar una sesión:**
+> Actualiza `docs/TRASPASO.md` (estado, la tabla de pruebas, lo pendiente) y el README del port, haz commit y push. Dime qué prueba me toca hacer y qué tengo que mandarte.
+
+### 11.4 Cómo leer los logs de UZDoom
+
+- **`log.txt`:** cada línea empieza con la memoria del heap en uso, en KB, por ejemplo `[48933] ...`. El heap es de 72 MB (~73.700 KB): si la cifra se acerca a eso, el fallo es de memoria.
+- **Líneas `C3D: ...`:** son del backend.
+  - `C3D: backend ready, N KB of linear memory free`: la GPU se inicializó.
+  - `C3D: lines and points are not drawn yet`: normal por ahora.
+  - `C3D: no memory for a WxH texture`: falta memoria lineal.
+- **Reservas de 1 MB o más:** salen con su tamaño y una lista de direcciones (las llamadas). Las reservas que fallan salen siempre. Se traducen así:
+  ```sh
+  arm-none-eabi-addr2line -f -C -e uzdoom-pruebaNN.elf 0x00123456 0x00234567 ...
+  ```
+- **`Init complete`:** el motor terminó de arrancar. Lo que pase después es el primer fotograma y el bucle del juego.
+- **`fatal.log`:** el texto del error fatal, el mismo que mostró el diálogo del sistema.
+- **Volcado de Luma (`.dmp`):** trae el PC (dónde se cerró) y el LR (desde dónde se llamó). Se traducen con el mismo `addr2line`.
+
+### 11.5 Plan para la prueba 9 de UZDoom: lograr la primera imagen
+
+**Paso 0, con el log de la prueba 8 en la mano:** decidir en qué caso estamos.
+
+| Lo que muestra el log o la consola | Qué hacer |
+|---|---|
+| Se cierra con error o volcado | `addr2line` con el `.elf` de la prueba 8. Seguir la traza |
+| La memoria sube sin parar en cada línea | Algo sigue creciendo por fotograma: mirar las reservas grandes y sus llamadas |
+| No se cierra, pantalla de arriba negra | Ver "Pantalla negra" abajo |
+| Se ve algo, pero girado, en espejo o con colores cambiados | Ver "Imagen rara" abajo |
+
+**Pantalla negra.** Separar las dos mitades del camino con diagnóstico en la prueba 9:
+
+1. **¿Funciona la presentación?** En `C3DFrameBuffer::ScreenBegin` (`c3d_framebuffer.cpp`), limpiar con magenta (`0xff00ffff`) en lugar de negro (`0x000000ff`).
+   - Si la pantalla sale magenta, la salida a la pantalla funciona y el problema está en los dibujos.
+   - Si sigue negra, el problema está en `C3D_RenderTargetSetOutput` o `C3D_FrameEnd`, o el bucle nunca llama a `Update()`.
+2. **¿Llegan los dibujos?** Durante los 3 primeros fotogramas, escribir en el log:
+   - cuántas veces se llamó a `Update()`;
+   - cuántos `Draw`/`DrawIndexed` hubo y **cuántos salieron antes de dibujar, y por qué**: sin vertex buffer, `attrIndex[0] < 0`, `hi - lo > 0xffff` o el anillo de índices lleno (`c3d_renderstate.cpp`, `DrawIndexed`);
+   - los argumentos de `SetViewport`;
+   - las 4 filas de la matriz `mvp` del primer dibujo;
+   - **la posición del primer vértice transformada en la CPU.** Tiene que quedar con x e y entre −w y w, y z entre −w y 0. Si queda fuera, la GPU la recorta y no se ve nada.
+3. **Triángulo de prueba:** si existe `sdmc:/3ds/gzdoom/c3d-test.txt`, dibujar en `Update()` un triángulo fijo sin textura, con matriz identidad y color de vértice fijo. Esto prueba el shader, los atributos y los combinadores sin el motor de por medio.
+4. **Texturas:** escribir en el log las primeras 20 texturas creadas (tamaño y nombre) en `C3DHardwareTexture::CreateTexture`.
+
+**Sospechosos ya vistos en el código** (revisar antes de la prueba 9):
+
+- **La matriz 2D llega por `C3DDataBuffer::BindRange`** (`c3d_buffers.cpp`), que guarda un puntero en `mHwUniforms`.
+  - Si el motor nunca llama a `BindRange` con `VIEWPOINT_BINDINGPOINT`, `ApplyMatrices` usa la identidad. Las coordenadas 2D en píxeles (0..400) quedarían fuera de pantalla: negro total.
+  - Comprobarlo en el log: ¿`mHwUniforms` es nulo en el primer dibujo?
+- **Las limpiezas a mitad de fotograma:** `C3DRenderState::Clear` usa `C3D_RenderTargetClear`, que en citro3d es un `GX_MemoryFill` en la cola de GX. La lista de dibujos del fotograma se envía recién en `C3D_FrameEnd`, así que **una limpieza a mitad de fotograma se ejecuta antes que todos los dibujos de ese fotograma**, no en su lugar. Para el 2D no importa (solo limpia la profundidad). Para el mundo 3D sí: hará falta `C3D_FrameSplit(0)` antes de limpiar.
+- **La luz por software:** `mLightParms[3]` lo pone `SetSoftLightLevel` solo en los dibujos 2D indexados (`hw_draw2d.cpp`). En `SetupAttributes` multiplica el color. Si queda en 0 de un dibujo anterior, todo lo siguiente sale negro. Comprobar que vuelva a −1.
+- **Profundidad:** la tabla `{GPU_GREATER, GPU_GEQUAL, GPU_ALWAYS}` supone profundidad invertida (el PICA guarda −z/w). Por ahora no importa, porque el 2D dibuja sin prueba de profundidad. Hay que verificarlo cuando se dibuje el mundo.
+- **El formato del vértice 2D:** 24 bytes, con posición `Float3` en 0, coordenadas de textura `Float2` en 12 y color `Byte4` en 20 (`v_2ddrawer.cpp`). Coincide con los loaders de `SetupAttributes` (sin relleno). El color ya llega como R,G,B,A porque `Draw2D` lo invierte en la primera pasada.
+
+**Imagen rara.**
+
+| Síntoma | Dónde se arregla |
+|---|---|
+| Girada 90° o en espejo | Signos de `u[0]`/`u[1]` en `ApplyMatrices` y las fórmulas de `SetViewport`/`SetScissor` (`c3d_renderstate.cpp`). Hoy: x' = y, y' = −x, como `Mtx_OrthoTilt` |
+| Rojo y azul cambiados | El empaquetado `R<<24 \| G<<16 \| B<<8 \| A` en `CreateTexture` (`c3d_hwtexture.cpp`) o el intercambio BGRA→RGBA de `Draw2D` |
+| Texturas boca abajo | El orden de filas en `CreateTexture` (comentario "t = 0 is the first row in memory") |
+| Pantalla de 240 de ancho, estirada | `C3D_RenderTargetCreate(240, 400, ...)` y `DISPLAY_TRANSFER_FLAGS` (`c3d_framebuffer.cpp`) |
+
+**Después de la primera imagen**, en este orden:
+1. menús y consola (2D completo);
+2. el mundo 3D en MAP01 (profundidad, cielo, sprites);
+3. líneas del automapa, convertidas en quads;
+4. luz por distancia con la tabla de niebla del PICA;
+5. sonido (traer OpenAL Soft/NDSP de la rama `n3ds`);
+6. controles 3DS y pantalla de abajo;
+7. el `.cia` (unique ID 0xF3D5C);
+8. H-Doom.
+
+### 11.6 Lo que sirve de los otros trabajos con GPU (DSDA y Duke)
+
+- La capa `pgl` (OpenGL sobre citro3d) de DSDA-Doom y NBlood resolvió los mismos problemas:
+  - la inclinación de la pantalla;
+  - los índices de 16 bits;
+  - las texturas en baldosas;
+  - la niebla con tabla;
+  - las limpiezas.
+
+  Ante una duda sobre citro3d, mirar cómo lo hizo `pgl` en el repo de DSDA. El backend de UZDoom no usa `pgl`, porque el hwrenderer de UZDoom ya está separado del API gráfico.
+- **Método que funcionó en DSDA:**
+  - comparar con el render por software, captura a captura;
+  - activar una función a la vez (primero sin texturas, luego con texturas, luego mezcla, luego niebla);
+  - una prueba con variantes cuando algo depende del gusto (brillo, niebla).
+
+### 11.7 Errores que ya se cometieron (para no repetirlos)
+
+- **Perder archivos del entorno temporal:** los Makefiles del simulador de Dolmexica y los `.elf` de las pruebas. Todo script o ayuda que se use más de una vez va al repo. Los `.elf`, a una carpeta local fuera de git.
+- **Ponerle `-U` después de `-D`** a los tipos de 32 bits: rompe `_intsup.h`. Van juntos en `add_compile_options`, primero `-U`.
+- **`-fno-short-enums` en todo el proyecto:** rompe las estructuras de libctru y citro3d. Mejor `: int` en los `enum` que hacen falta.
+- **Subir un clon superficial (`--depth`)** a GitHub: lo rechaza. Hay que hacer `git fetch --unshallow` primero.
+- **Mandar al dueño un zip entero** cuando el `.3dsx` ya lleva los datos: basta el `.3dsx`.
+- **Confiar en Azahar (emulador)** para memoria o velocidad: solo sirve para la lógica.
+- **El `CLAUDE.md` de la rama `n3ds` de gzdoom-3ds es el de tinaut1986:** sus reglas de git (repos, ramas `release/*`, títulos) **no aplican** a este proyecto. Reemplazarlo cuando se trabaje ahí.
+
+### 11.8 Materiales que acompañan este traspaso
+
+- `TRASPASO-n3ds-ports.pdf` y `.docx`: este documento.
+- `uzdoom-prueba08.elf.xz`: el ejecutable con símbolos de la prueba 8, para traducir su log o su volcado (descomprimir con `xz -d`).
+- En GitHub: el código y los README de cada port (sección 2). `gzdoom-3ds/platform/3ds/build.sh` (rama `uzdoom-3ds`) compila UZDoom con un solo comando.
