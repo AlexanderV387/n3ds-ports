@@ -41,6 +41,8 @@ Responde por escrito, dentro de la plantilla. Si alguna respuesta es "no" o "no 
 3. **¿Lo que dices que se verá en pantalla puede verse?** Comprueba el color final con los datos reales: qué registro de entrada lee el shader y qué valor le llega. Un triángulo negro sobre fondo negro "no se ve" aunque funcione. Si la pantalla no es fiable, el criterio es el log.
 4. **¿Se resuelve en una sola compilación?** Si sabes de antemano que harán falta más pruebas para separar hipótesis ("para distinguir B de C haría falta la 28"), mete esas variantes **en esta**: un interruptor por variante, una pasada por variante. Cada compilación y cada ronda en la consola cuestan más que una pasada extra.
 5. **¿Cada afirmación sobre una API tiene su fuente** (archivo y línea en `~/work/refs/`, o `hechos-3ds.md`)?
+6. **Si todas las variantes dieran el mismo resultado, ¿qué sabría?** Busca la hipótesis que tu diseño no puede descartar porque esa fila de la tabla **nunca cambia** en ninguna pasada (por ejemplo, los datos del dibujo). Si la hay, añade una pasada que la cambie a ella sola, o escribe que esta prueba no la distingue.
+7. **¿Puede Alex preparar cada pasada sin equivocarse?** Prefiere archivos de control vacíos con nombres distintos a archivos con contenido (un número dentro), que el Bloc de notas puede guardar con BOM o salto de línea.
 
 ## Al concluir: no digas más de lo que se cambió
 
@@ -57,6 +59,7 @@ La conclusión solo puede nombrar lo que cambió entre las pasadas, según la ta
 ## Errores que ya pasaron (no repetir)
 
 - **Prueba 26:** la pasada con el shader de `simple_tri` cambió a la vez el shader, la matriz (identidad frente a `Mtx_OrthoTilt`), los vértices (z −0,5 en recorte frente a z 0,5 en píxeles) y los atributos (2 fijos frente a 1). Se escribió "el shader del motor es el culpable": la conclusión correcta era "el shader o sus datos". La tabla de diferencias lo habría mostrado.
+- **Propuesta 27 (segunda versión):** las cuatro variantes cambiaban solo el shader, bien aislado, pero **todas con los datos del motor**: si todas se colgaban, no se habría sabido si era el código del shader o los datos (matriz, vértices, atributos). Faltaba la pasada que cambia solo los datos (el shader de `simple_tri` con los datos del motor). Además, una hipótesis decía "mul indirecto vía texmat", que no existe (`texmat` se usa en los `dp4`).
 - **Propuesta 27 (primera versión):** el shader intermedio leía el color de `v1`, pero ese camino pone la textura (0,0,0,0) en `v1`: el triángulo saldría negro aunque funcionara, y la pantalla habría engañado. Además dejaba hipótesis sin separar "para la 28".
 
 - **Prueba 22:** "saltar el fotograma 0" movió el mismo dibujo al fotograma 1, y se concluyó que "no depende de lo que se dibuja". Antes de concluir, pregúntate: ¿la variable cambió de verdad, o solo de sitio?
