@@ -30,6 +30,10 @@ Objetivo: que nuestra versión de Dolmexica se comporte como MUGEN 1.1, regla po
 | Un jugador atado al rival puede salir de la pantalla (la atadura va después del límite) | nota de Ikemen en `update` | lo devolvía a la pantalla | `f45ec16` | agarre en la esquina: el rival sale un momento y vuelve |
 | `ID` es el número único de MUGEN (56 y 57, cada helper el siguiente, se reinicia por partida); `PlayerID`/`PlayerIDExist` buscan en **todos**, también el rival | `initPlayerID`, `newCharId` de Ikemen | `ID` era el id del helper (0 los personajes) y `PlayerID` solo buscaba en los propios helpers | `1ca6773` | prueba `UniqueIDs` (Kung Fu Man contra Galactus) |
 | `HitBy`/`NotHitBy`: el tipo de estado es el **real del atacante** (el del `attr` solo para proyectiles); `NotHitBy` bloquea si coincide el estado **o** el tipo de ataque; `HitBy` deja pasar solo si coinciden **los dos**; una clase sola (N, S, H/A) son sus tres tipos | `attrCheck`, `checkHitBySlot`, `attrMask` de Ikemen | `HitBy` aceptaba cualquiera de las dos partes: los helpers "solo proyectiles" (Kitana, Psylocke, Wonder Woman, Mileena, Morrigan, Neo Chun-Li) recibían todo | `818d814` | censo de Kitana; la intención de los autores (Chun-Li llama "NotHitBy" a su `HitBy value = SCA`) |
+| Cada máquina de estados corre **una vez por tic**: andar, agacharse, levantarse o saltar (cambios del motor) se aplican tras el estado -1 y el nuevo estado corre una sola vez; los cambios hechos después de los estados (aterrizar, cubrirse, levantarse del suelo, golpes) no quitan el tic siguiente | `actionPrepare`/`actionRun` y `stateChange2` de Ikemen | el cambio corría todo otra vez (-3, -2, -1 dos veces, el estado nuevo dos veces) y **el tic siguiente no corría**: un botón pulsado justo después de agacharse o de empezar a andar se perdía; aterrizar o cubrirse duraba un tic más | `dolmexica` (este commit) | prueba `Juggle` con botones: la palma de Kung Fu Man (`~D, DF, F, y`) sale con la `y` 3 tics después de `F`; antes solo en el mismo tic |
+| Juggle (ver la fila de pendientes, ahora hecho) | `hitPrecheck`, `addId` de Ikemen | una sola cuenta para todos, se restaba en cada golpe mirado | `dolmexica` | prueba `Juggle` (la palma cuesta 4, una vez; vuelve a 15 al levantarse) |
+| La **energía es del jugador raíz**: `Power`, `PowerAdd`, `PowerSet` y la energía que dan o quitan los golpes de un helper son de su jugador; no cambia tras acabar la ronda | `powerOwner`, `setPower` de Ikemen | cada helper tenía la suya y la escribía en la barra del jugador: el nivel bajaba y subía en cada golpe, con su sonido ("bong", `level1.snd = 21,0` de `fight.def`) | `dolmexica` | Felicia contra Apocalypse: 32 subidas de nivel en un combate, ahora 3 |
+| (3DS) Dos sonidos en "cualquier canal libre" en el mismo tic van a canales distintos | — (fallo del port) | el DSP da un canal por libre hasta su siguiente fotograma: el segundo sonido cortaba al primero (registro de la consola: el sonido de nivel y la voz de Apocalypse en el canal 23 en el primer tic) | prism | revisado en el registro de la prueba 72 |
 | Un `.def` que termina en `clave =` sin nada más | — (fallo de lectura) | leía un byte fuera del archivo (Mileena) | prism `5e79918` | simulador con ASan |
 
 ## Comprobado igual que MUGEN (sin cambios)
@@ -45,11 +49,17 @@ Objetivo: que nuestra versión de Dolmexica se comporte como MUGEN 1.1, regla po
 
 | Regla de MUGEN | Fuente | Dolmexica | Por qué espera |
 |---|---|---|---|
-| Juggle: puntos por atacante (empiezan en su `airjuggle`); se comprueban si el atacante ya tiene al rival como objetivo, aunque esté de pie; un rival que aún no es objetivo siempre se puede golpear (los proyectiles siempre se comprueban); el coste es el `juggle` del estado, una vez por estado (o el `air.juggle` de cada proyectil), y se resta solo si el golpe entra sobre un rival que caía antes o después | `hitPrecheck`, `addId`, `exitTarget` de Ikemen | solo comprueba si el rival cae o está tumbado, resta en cada golpe mirado (entre o no) y una sola cuenta para todos | escrito, falta una prueba dirigida (después de la 72) |
 | Un helper `helpertype = player` empuja y es empujado como un jugador | `pushDetection` y `CSF_playerpush` de Ikemen | los helpers nunca empujan | afecta al helper de New Kyouki; hacerlo con prueba propia |
 | Guardia: los estados de guardia de `common1.cns` conservan el control; Ikemen empieza la guardia en la misma cadena que andar/saltar | `common1.cns`; `actionPrepare` de Ikemen | la guardia se resuelve aparte, tras los estados | revisar el momento exacto con capturas de MUGEN |
 
+## Comprobado: es el propio personaje (igual en MUGEN)
+
+- **Apocalypse, misiles que siguen al rival:** su estado 603 persigue al rival con `PosAdd` según `P2Dist` hasta que toca (`MoveContact`) o hasta que `root, var(21) = 0`; `var(21)` se pone a 170 y el personaje no lo baja nunca, y sus golpes (`hitflag = MAF`) no pueden dar a un rival tumbado. El 601 flota 200 tics junto al rival y su explosión (602) también lo sigue, 12 tics. Las variables se borran al empezar cada ronda, como en MUGEN.
+
 ## Sin verificar todavía
+
+- `StopSnd channel = -1`: Ikemen (como MUGEN) para solo los sonidos de los personajes; Dolmexica para todos, también el locutor. En la 3DS hace falta separar los canales libres de personajes y de sistema.
+- Daño de cada personaje: la fórmula es la de Ikemen (daño × ataque × `attack`/100 ÷ defensa); falta comparar un mismo golpe en MUGEN 1.1.
 
 - El oscurecimiento en superpausa: en MUGEN depende de `ownpal` (el helper sin paleta propia se oscurece con su padre). Dolmexica dibuja una capa oscura. Hace falta capturar un super en MUGEN.
 - El orden de dibujo de un helper nuevo (MUGEN puede reutilizar el de uno borrado; Ikemen tampoco lo copia).
