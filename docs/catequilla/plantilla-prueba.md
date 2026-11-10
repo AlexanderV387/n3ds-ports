@@ -27,7 +27,7 @@ Cada prueba en consola cuesta tiempo del dueño: hay que copiarla a la SD, proba
 
 **Marcadores que se quedan:** los de la pregunta abierta. **Marcadores que se quitan:** los de preguntas ya respondidas.
 
-**Cómo se compila:** `platform/3ds/build-test.sh NN` (nada a mano).
+**Cómo se compila:** `platform/3ds/docker-build-test.sh NN` (nada a mano).
 ```
 
 ## Al recibir los logs

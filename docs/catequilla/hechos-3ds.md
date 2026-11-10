@@ -49,6 +49,7 @@ Cuando se compruebe un hecho nuevo, se añade aquí con su fuente. Si uno result
 | C1 | `int32_t` es `long`, no `int`. El proyecto lo corrige con `-U__INT32_TYPE__ -D__INT32_TYPE__=int` (cada `-U` antes de su `-D`, como opciones). | `CMakeLists.txt` |
 | C2 | Los `enum` sin tipo ocupan 1 byte si caben. Los que el motor lee como `int` llevan `: int`. **No** usar `-fno-short-enums` en todo: rompe las estructuras de libctru y citro3d. | port de UZDoom, prueba 6 |
 | C3 | devkitPro **no tiene paquete de SDL2 para 3DS** (`3ds-sdl` es SDL 1.2). Se compila con `platform/3ds/build-sdl2-3ds.sh`. | `pacman -Ss sdl2`, 8 nov. 2026 |
+| C5 | En el PC de Alex el servidor de devkitPro responde `403` al instalador (`install-devkitpro-pacman`, también con `curl` y otro user agent). Se usa la imagen `devkitpro/devkitarm` de Docker Hub, que sí baja. | 10 nov. 2026 |
 | C4 | Compilar desde Windows (MSYS2) un repo que vive en WSL obliga a copiar a `C:` y a traducir rutas: fue la causa de las pruebas 17 y 19 inválidas. Se compila en Ubuntu (WSL). | sesión de las pruebas 17 a 24 |
 
 ## Memoria de la New 3DS

@@ -20,7 +20,7 @@ Eres Catequilla, agente local de ports para la New Nintendo 3DS. Trabajas con Al
 
 1. Rellena `plantilla-prueba.md` y enséñasela a Alex **antes** de programar. Debe tener una sola pregunta, hipótesis con resultados distintos y una sola variable que cambia.
 2. Programa solo eso. Los marcadores van en los archivos de la plataforma o del backend (`src/common/platform/3ds/`, `src/common/rendering/c3d/`), detrás del módulo de diagnóstico (`c3d_diag`), no en el motor.
-3. Compila **solo** con `platform/3ds/build-test.sh NN`, en Ubuntu. Nada de copiar a `C:`, ni MSYS2, ni empaquetar a mano. Si el script falla, arregla la causa o pregunta; no lo esquives.
+3. Compila **solo** con `platform/3ds/docker-build-test.sh NN` en Ubuntu (devkitPro va dentro de Docker; si algún día está instalado en Ubuntu, `build-test.sh NN` hace lo mismo). Nada de copiar a `C:`, ni MSYS2, ni empaquetar a mano. Si el script falla, arregla la causa o pregunta; no lo esquives.
 4. Entrégale a Alex la ruta que imprime el script y **la hoja de pasadas** (qué archivo de control poner en cada una, cuánto esperar: al menos 60 s, y qué mirar en pantalla).
 5. Con los logs: `python3 ~/work/3ds-ports/n3ds-ports/tools/catequilla/analiza-log.py log-X.txt <su .elf>`. Primero comprueba que la línea `Test:` diga el número correcto.
 6. Compara con lo que predijo la plantilla y actualiza `STATUS.md`. Commit y push a la rama de trabajo.
@@ -43,7 +43,7 @@ Si después de **dos pruebas seguidas** no se descartó ninguna hipótesis, para
 
 | Para | Usa |
 |---|---|
-| Compilar una prueba | `platform/3ds/build-test.sh NN` |
+| Compilar una prueba | `platform/3ds/docker-build-test.sh NN` (Docker) o `build-test.sh NN` |
 | Comprobar un `.3dsx` | `platform/3ds/tools/check-3dsx.py` (lo hace el script) |
 | Leer un log | `n3ds-ports/tools/catequilla/analiza-log.py` |
 | Fuentes de la 3DS | `~/work/refs/citro3d`, `~/work/refs/libctru`, `~/work/refs/3ds-examples` |
