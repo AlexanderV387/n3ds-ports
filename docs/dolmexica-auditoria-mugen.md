@@ -34,6 +34,7 @@ Objetivo: que nuestra versión de Dolmexica se comporte como MUGEN 1.1, regla po
 | Juggle (ver la fila de pendientes, ahora hecho) | `hitPrecheck`, `addId` de Ikemen | una sola cuenta para todos, se restaba en cada golpe mirado | `dolmexica` | prueba `Juggle` (la palma cuesta 4, una vez; vuelve a 15 al levantarse) |
 | La **energía es del jugador raíz**: `Power`, `PowerAdd`, `PowerSet` y la energía que dan o quitan los golpes de un helper son de su jugador; no cambia tras acabar la ronda | `powerOwner`, `setPower` de Ikemen | cada helper tenía la suya y la escribía en la barra del jugador: el nivel bajaba y subía en cada golpe, con su sonido ("bong", `level1.snd = 21,0` de `fight.def`) | `dolmexica` | Felicia contra Apocalypse: 32 subidas de nivel en un combate, ahora 3 |
 | (3DS) Dos sonidos en "cualquier canal libre" en el mismo tic van a canales distintos | — (fallo del port) | el DSP da un canal por libre hasta su siguiente fotograma: el segundo sonido cortaba al primero (registro de la consola: el sonido de nivel y la voz de Apocalypse en el canal 23 en el primer tic) | prism | revisado en el registro de la prueba 72 |
+| `MoveContact`, `MoveHit`, `MoveGuarded`, `MoveReversed` valen 1 en el tic siguiente al contacto y suben desde ahí, también si el atacante no tiene pausa | `mctime` de Ikemen (sube después de los estados) | los golpes se detectan al empezar el tic y el contador subía antes de los estados: con `pausetime = 0` el atacante ya veía 2 y nunca 1. Los misiles de Apocalypse explotan con `MoveContact = 1`: golpeaban y se quedaban hasta el fin de la ronda, más con cada super (40 a la vez) | `5725fc9` | `JumpedOver` con Apocalypse: el misil pasa a su explosión y desaparece; Kung Fu Man y Felicia sin cambios en el censo. Antes lo di por "igual en MUGEN" leyendo el código sin mirarlo en un combate: error |
 | Un `.def` que termina en `clave =` sin nada más | — (fallo de lectura) | leía un byte fuera del archivo (Mileena) | prism `5e79918` | simulador con ASan |
 
 ## Comprobado igual que MUGEN (sin cambios)
@@ -51,10 +52,6 @@ Objetivo: que nuestra versión de Dolmexica se comporte como MUGEN 1.1, regla po
 |---|---|---|---|
 | Un helper `helpertype = player` empuja y es empujado como un jugador | `pushDetection` y `CSF_playerpush` de Ikemen | los helpers nunca empujan | afecta al helper de New Kyouki; hacerlo con prueba propia |
 | Guardia: los estados de guardia de `common1.cns` conservan el control; Ikemen empieza la guardia en la misma cadena que andar/saltar | `common1.cns`; `actionPrepare` de Ikemen | la guardia se resuelve aparte, tras los estados | revisar el momento exacto con capturas de MUGEN |
-
-## Comprobado: es el propio personaje (igual en MUGEN)
-
-- **Apocalypse, misiles que siguen al rival:** su estado 603 persigue al rival con `PosAdd` según `P2Dist` hasta que toca (`MoveContact`) o hasta que `root, var(21) = 0`; `var(21)` se pone a 170 y el personaje no lo baja nunca, y sus golpes (`hitflag = MAF`) no pueden dar a un rival tumbado. El 601 flota 200 tics junto al rival y su explosión (602) también lo sigue, 12 tics. Las variables se borran al empezar cada ronda, como en MUGEN.
 
 ## Sin verificar todavía
 
