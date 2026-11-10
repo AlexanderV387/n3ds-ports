@@ -93,6 +93,16 @@ Al cerrar cada prueba se anota en `STATUS.md`. Después de la quinta se compara 
   - el módulo `c3d_diag` con los interruptores de la prueba 25;
   - fuera los marcadores de las pruebas 13, 14 y 21 del motor.
 
-## 8. Límite que no arreglan las herramientas
+## 8. Seguimiento (nuevo método)
+
+| Prueba | ¿Válida? | ¿Aportó algo nuevo? | Correcciones de Claude | Errores de razonamiento |
+|---|---|---|---|---|
+| 25 (diseñada por Claude) | sí | sí: el dibujo cuelga; no la textura ni los buffers del motor | — | análisis de Catequilla: PICA "con shader de fragmento"; "el estado se hereda"; HOME "abre una consola"; afirmar sin pruebas que el texto en ruso no afecta |
+| 26 | sí | sí: **primera imagen** (triángulo de `simple_tri`) | 1 ronda (pequeña) | conclusión mayor que lo que se cambió (shader + matriz + vértices + atributos) |
+| 27 (propuesta) | — | — | 1 ronda | color leído del registro equivocado (triángulo invisible); hipótesis sin separar dejadas "para la 28" |
+
+**Patrón que queda:** el proceso (plantilla, una sola compilación, commit, logs completos) ya funciona sin ayuda. Lo que todavía necesita revisión externa es **el control de variables**: comprobar que solo cambia lo que dice y no concluir más de lo que se cambió. Desde el 10 nov. la plantilla obliga a una tabla de diferencias y a cinco preguntas de autocomprobación (`plantilla-prueba.md`). Meta: que las próximas propuestas lleguen sin estos dos errores. Si se repiten, el siguiente paso es un revisor automático: una segunda conversación de Catequilla, con el modo de análisis (pensando), que solo revise la plantilla contra la autocomprobación antes de enseñársela a Alex.
+
+## 9. Límite que no arreglan las herramientas
 
 Un modelo de 27B que corre en parte desde la RAM es lento, y en diagnósticos difíciles (como un cuelgue de GPU) necesita que un modelo grande diseñe la prueba. Cuando se atasque dos pruebas seguidas, lo indicado es llevar el resumen de `STATUS.md` a un modelo grande. Si algún día se invierte en hardware: una GPU de 24 GB para que el modelo corra entero en ella, o un modelo MoE (más rápido) para las tareas mecánicas.
