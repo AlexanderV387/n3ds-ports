@@ -115,7 +115,7 @@ En [`controles-fps.md`](controles-fps.md):
 
 ### Motor compatible con MUGEN (Dolmexica Infinite): a medio camino
 
-- **Prueba en curso: `dolmexica-prueba72.3dsx`** (10 nov. 2026, commit `03f3716`): el empuje entre personajes como MUGEN (ver abajo); se entrega cuando pase la ronda del simulador con todos los personajes. La 71 se probó: los errores de sprite siguen igual (no tocaba el dibujo).
+- **Última prueba entregada: `dolmexica-prueba72.3dsx`** (10 nov. 2026, dolmexicainfinite `818d814`, prism `5e79918`; `.elf` md5 del `.xz` `a83df306b2e06438ba8a847efbdc4afc`). Primera tanda de la auditoría frente a MUGEN 1.1: empuje entre personajes, andar/frenar/agacharse, empuje de esquina, agarres, IDs de jugador (`ID`, `PlayerID`), `HitBy`/`NotHitBy`, y dos fallos de memoria (Mileena, Lei-lei). Detalle, fuentes y lo pendiente en [`dolmexica-auditoria-mugen.md`](dolmexica-auditoria-mugen.md). La 71 se probó: los errores de sprite seguían igual (no tocaba el dibujo).
 - **Funciona:** carga personajes y escenarios desde `sdmc:/3ds/dolmexica/` (autodetección en `chars/`), menú de pausa con START, `compat-log.txt` por personaje, vista 4:3 automática para jefes grandes. Además, muchas reglas de MUGEN/Ikemen implementadas y verificadas contra MUGEN 1.0/1.1:
   - helpers sin animación hasta que su estado la pone;
   - comparación de strings sin mayúsculas;
