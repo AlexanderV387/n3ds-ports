@@ -39,6 +39,10 @@ Objetivo: que nuestra versión de Dolmexica se comporte como MUGEN 1.1, regla po
 | `ModifyExplod` con solo `sprpriority` (u `ontop`) no mueve el explod | `modifyExplod` de Ikemen | lo recolocaba por su `postype`: el suelo de Galactus subía con él en su intro y quedaba 22 más bajo en la ronda 1 que en las demás | `57df996` | capturas de MUGEN (rondas 1 y 2) y del simulador |
 | A igual `sprpriority`, todo personaje (y helper) se dibuja sobre todo explod, también los del otro jugador | `explodCueDraw` tras `charList.cueDraw` en Ikemen | el desfase del jugador 2 era mayor que el de los explods: el suelo de Galactus (-3) tapaba al jugador 1 KO (5150, -3) | `57df996` | ídem |
 | `Redirección, AnimElem = n, op t` (y `TimeMod`, `HitDefAttr`) se leen igual con o sin espacios | MUGEN | el lector de `.def` devuelve las líneas con comas sin espacios y la palabra antes de `=` incluía la redirección: la línea se leía como lista, siempre verdadera. El brazo de Galactus se quedaba en su pose alzada: el puño iba solo (la "muñeca" desaparecía) | `b66a370` | capturas de MUGEN y del simulador del golpe al suelo y del rayo de la mano; 10 personajes usan la forma |
+| El golpeado entra **una vez** en su estado de recibir golpe | `hitDetection` de Ikemen | tras cada golpe se volvía a poner (pensado solo para `p1stateno`): lo de su tiempo 0 se hacía dos veces; el puño de Galactus creaba dos "Damage Check" y su cuerpo, que espera uno, no recibía el daño | `3fefe4a` | jab de Kung Fu Man a Galactus: 67, igual que MUGEN 1.1 |
+| El daño de un golpe a un helper es **de su propia vida**, y solo si queda en un estado de recibir golpe | `lifeAdd` sobre el golpeado en Ikemen | iba a la vida del jugador raíz: los personajes cuyas piezas reciben y pasan el daño (Galactus) lo recibían doble | `3fefe4a` | ídem |
+| `LifeAdd` escalado por defensa se redondea (mínimo 1) | `lifeAdd` de Ikemen | se truncaba (Galactus 66, MUGEN 67) | `3fefe4a` | ídem |
+| Los valores de vida, ataque y defensa de los 18 personajes se leen como en sus archivos; la fórmula de daño es la de MUGEN | — | correcto | — | jab de Kung Fu Man: Felicia 23, Lei-lei 26, Galactus 67 en Dolmexica y en MUGEN 1.1 |
 | Un `.def` que termina en `clave =` sin nada más | — (fallo de lectura) | leía un byte fuera del archivo (Mileena) | prism `5e79918` | simulador con ASan |
 
 ## Comprobado igual que MUGEN (sin cambios)
@@ -58,6 +62,9 @@ Objetivo: que nuestra versión de Dolmexica se comporte como MUGEN 1.1, regla po
 | Guardia: los estados de guardia de `common1.cns` conservan el control; Ikemen empieza la guardia en la misma cadena que andar/saltar | `common1.cns`; `actionPrepare` de Ikemen | la guardia se resuelve aparte, tras los estados | revisar el momento exacto con capturas de MUGEN |
 
 ## Sin verificar todavía
+
+- **Rayo de la mano de Galactus:** en MUGEN 1.1 tumba a Kung Fu Man tras unos 32 golpes (192); en Dolmexica lo deja atrapado en 5020 mientras dura (hasta ~110 golpes). En MUGEN algunos ciclos de golpe duran 3 tics y `HitShakeOver` se cumple; aquí siempre 2. Falta averiguar qué hace que MUGEN se salte ese tic.
+- El modo rápido de pruebas (`Makefile.linux`, sin dibujar) no detecta golpes de algunos helpers: medir con el simulador (`Makefile.sim`).
 
 - `StopSnd channel = -1`: Ikemen (como MUGEN) para solo los sonidos de los personajes; Dolmexica para todos, también el locutor. En la 3DS hace falta separar los canales libres de personajes y de sistema.
 - Daño de cada personaje: la fórmula es la de Ikemen (daño × ataque × `attack`/100 ÷ defensa); falta comparar un mismo golpe en MUGEN 1.1.
