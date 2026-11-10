@@ -84,7 +84,11 @@ En los forks, un commit en `n3ds` cuyo mensaje contiene `[release]` dispara el w
 | GZDoom 4.7.1 (`gzdoom-3ds`, rama `n3ds`) | `./platform/3ds/build.sh hardware-hybrid`. Descarga y parchea SDL2, ZMusic, OpenAL Soft (NDSP), NovaGL, Freedoom y Legend of Doom. Sin `libsdl2-dev` en el host: `SDL2DIR=<sdl2 del host estático>`. Con `LOD3DS_FULL_MUSIC=1` se salta la conversión de música (ffmpeg) |
 | UZDoom (`gzdoom-3ds`, rama `uzdoom-3ds`) | `platform/3ds/build.sh` (ver [su README](https://github.com/AlexanderV387/gzdoom-3ds/blob/uzdoom-3ds/platform/3ds/README.md)): herramientas del host, compilación 3DS y `.3dsx` con los datos del motor dentro |
 
-**Perdido al cerrar el contenedor:** los Makefiles del simulador de Dolmexica (`Makefile.sim` con ASan y `Makefile.simmargin` con `-DDOLMEXICA_TEST_SIDE_MARGIN=40`) no estaban en el repo. Se rehacen copiando `Makefile.linux` y enlazando con `prism/bin_n3dssim`. Las órdenes de prueba del simulador (`SET_P1_LIFE`, `SET_P2_LIFE`, `PRINT_CAMERA`, `PRINT_HELPERS_LEN`) sí están en el código.
+**Pruebas de Dolmexica en PC** (desde el 10 nov. 2026, en el repo):
+- `make -f Makefile.linux -j` (rápido, sin dibujar) y `make -f Makefile.sim -j` (sobre `prism/bin_n3dssim`: texturas de la 3DS simuladas, ASan, dibuja). Con g++ 13 o más nuevo, prism necesita `CXX="g++ -include cstdint"`.
+- Se corren desde una carpeta que tenga `assets/` (datos de Dolmexica 1.8 y los personajes en `assets/chars/<nombre>/<nombre>.def`). En PC las rutas del `.def` deben ir con `/`; `DOLMEXICA_ALLOW_MINUS=1` acepta archivos con `-` (Galactus, Onslaught).
+- Pruebas útiles (`--gtest_filter=`): `CrashTest.CharacterCrashTest` (con `DOLMEXICA_ASSET_FILTER`), `EntityCensusTest.MirrorMatchCensus`, `ContinueHelperTest.HelpersAfterContinue` (árbol de helpers antes y después del "Continue?"), `ContinueHelperTest.MissingHelpers` (helpers que faltan, `DOLMEXICA_WATCH_IDS`), `ContinueHelperTest.JumpedOver` (cruzar al rival; con `DOLMEXICA_VERSUS=1` y `PRISM_LINUX_SCRIPT="360:right;420:up,right;..."` se pulsan botones del jugador 1).
+- **MUGEN 1.1 de referencia en Linux:** Wine + `Xvfb :99` + `dolmexicainfinite/tools/mugen-shots.sh` (capturas de una pelea; con xdotool se controlan los dos jugadores). El código de Ikemen GO (`src/char.go`) se baja de raw.githubusercontent.com para citar reglas.
 
 ---
 
@@ -111,7 +115,7 @@ En [`controles-fps.md`](controles-fps.md):
 
 ### Motor compatible con MUGEN (Dolmexica Infinite): a medio camino
 
-- **Última prueba entregada: `dolmexica-prueba71.3dsx`**; falta que el dueño la confirme en consola.
+- **Prueba en curso: `dolmexica-prueba72.3dsx`** (10 nov. 2026, commit `03f3716`): el empuje entre personajes como MUGEN (ver abajo); se entrega cuando pase la ronda del simulador con todos los personajes. La 71 se probó: los errores de sprite siguen igual (no tocaba el dibujo).
 - **Funciona:** carga personajes y escenarios desde `sdmc:/3ds/dolmexica/` (autodetección en `chars/`), menú de pausa con START, `compat-log.txt` por personaje, vista 4:3 automática para jefes grandes. Además, muchas reglas de MUGEN/Ikemen implementadas y verificadas contra MUGEN 1.0/1.1:
   - helpers sin animación hasta que su estado la pone;
   - comparación de strings sin mayúsculas;
@@ -123,9 +127,10 @@ En [`controles-fps.md`](controles-fps.md):
   - prioridades de sprite de más de ±10;
   - BindToParent/Root con tiempo -1;
   - proyectiles de helpers destruidos;
-  - la bandera de guardia.
+  - la bandera de guardia;
+  - **el empuje entre personajes (prueba 72):** se empujan si sus cajas de tamaño se solapan también en altura (cada una con su `height`) y sus Clsn2 se tocan, como `pushDetection` de Ikemen. Un personaje con helpers pegados (`BindToParent`) ya empuja; solo un agarre (el rival atado) lo apaga. Antes, Kung Fu Man le saltaba por encima a Apocalypse (`height = 300`), Apocalypse se giraba al empezar a caminar (regla no documentada de MUGEN, ver `changeStateEx` de Ikemen) y su torso (el propio personaje, animación 0) se reflejaba mientras sus partes (helpers sin `facing`) no: "se desarmaba". Comprobado con `JumpedOver` y en MUGEN 1.1 con Wine (allí Kung Fu Man no logra pasar).
 - **Pendientes concretos:**
-  - **Galactus:** la mano desaparece después de "continuar".
+  - **Galactus:** la mano desaparece después de "continuar" (arcade). No se reproduce en PC ni en el simulador con Kung Fu Man (el puño, helper 4, se vuelve a crear y se dibuja). El dueño cree que jugaba con New Kyouki: probar con él (memoria de texturas).
   - **Onslaught:** los 4 orbes eléctricos no conectan.
   - **Abyss se ve invisible:** el `abyss.sff` de la SD del dueño está cortado (786 KB de 9.314.266). Hay que volver a copiarlo. El motor ya avisa de SFF cortados.
   - **Memoria de texturas** para personajes grandes (CvS, POTS, HD) (tarea 50).
@@ -136,7 +141,11 @@ En [`controles-fps.md`](controles-fps.md):
   - la ultimate de Kyouki no conecta contra Galactus;
   - Apocalypse solo recibe daño en la cabeza;
   - el daño de Onslaught es el del arcade;
-  - Galactus resiste mucho (life 4000, defence 300).
+  - Galactus resiste mucho (life 4000, defence 300);
+  - dos "Watchers" de Galactus a la vez (su estado 5900 crea uno y su intro 190 otro);
+  - Poison Ivy entra en estados que no tiene (230, 430, 1400) y pide animaciones que no existen (155, 455, 701, 723);
+  - las bolas de cañón de Apocalypse (helpers 700/701) se quedan flotando sobre un rival tumbado (`hitflag = MAF` y `var(21)` nunca vuelve a 0);
+  - Onslaught y Wonder Woman (triple salto) sí pueden pasar por encima de Apocalypse: Onslaught no tiene Clsn2 al caminar y Wonder Woman va más alta que la Clsn2 de él.
 - **Para publicar un avance en Reddit:** Harley Quinn (de Ax, del "Batman 2021 fullgame") contra Poison Ivy (de Mr.Giang), en el escenario por defecto de MUGEN (Elecbyte). El borrador del post y la respuesta para el bot están en la conversación anterior; el autor de Dolmexica es Josh Tari (CaptainDreamcast), licencia MIT.
 
 ### Motor ZDoom: GZDoom 4.7.1 y UZDoom, en curso (lo último en lo que se trabajaba)
