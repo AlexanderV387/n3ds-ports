@@ -29,7 +29,7 @@ Cada prueba en consola cuesta tiempo del dueño: hay que copiarla a la SD, proba
 
 **Cómo se compila:** `platform/3ds/docker-build-test.sh NN` (nada a mano).
 
-**Autocomprobación** (obligatoria, ver abajo): tabla de diferencias entre pasadas y las 5 preguntas, respondidas.
+**Autocomprobación** (obligatoria, ver abajo): las 9 preguntas, respondidas con su número.
 ```
 
 ## Autocomprobación antes de enseñar la plantilla
@@ -40,9 +40,11 @@ Responde por escrito, dentro de la plantilla. Si alguna respuesta es "no" o "no 
 2. **¿Cada hipótesis predice algo distinto en el log?** Escribe la línea `[C3D]` concreta que saldría bajo cada una. Si dos hipótesis dan el mismo log, no las distingue esta prueba.
 3. **¿Lo que dices que se verá en pantalla puede verse?** Comprueba el color final con los datos reales: qué registro de entrada lee el shader y qué valor le llega. Un triángulo negro sobre fondo negro "no se ve" aunque funcione. Si la pantalla no es fiable, el criterio es el log.
 4. **¿Se resuelve en una sola compilación?** Si sabes de antemano que harán falta más pruebas para separar hipótesis ("para distinguir B de C haría falta la 28"), mete esas variantes **en esta**: un interruptor por variante, una pasada por variante. Cada compilación y cada ronda en la consola cuestan más que una pasada extra.
-5. **¿Cada afirmación sobre una API tiene su fuente** (archivo y línea en `~/work/refs/`, o `hechos-3ds.md`)?
+5. **¿Cada afirmación sobre una API tiene su fuente** (archivo y línea en `~/work/refs/`, o `hechos-3ds.md`)? No basta con que la función exista: escribe **qué dice ese código que pasa** y cuándo (por ejemplo, "el gancho ONEXIT se llama en `aptExit`, después de `main`"), y saca tu predicción del log de ahí, no de lo que suena lógico.
 6. **Si todas las variantes dieran el mismo resultado, ¿qué sabría?** Busca la hipótesis que tu diseño no puede descartar porque esa fila de la tabla **nunca cambia** en ninguna pasada (por ejemplo, los datos del dibujo). Si la hay, añade una pasada que la cambie a ella sola, o escribe que esta prueba no la distingue.
 7. **¿Puede Alex preparar cada pasada sin equivocarse?** Prefiere archivos de control vacíos con nombres distintos a archivos con contenido (un número dentro), que el Bloc de notas puede guardar con BOM o salto de línea.
+8. **¿Lo que vas a añadir ya existe?** Antes de crear una función, un archivo, un interruptor o una variable, busca su nombre: `grep -rn "nombre" src/` y mira si ese archivo se compila en la 3DS (`src/CMakeLists.txt`). Si ya existe, se modifica ahí (bajo `#ifdef __3DS__` si es código del motor); si defines otra, el enlazado falla.
+9. **¿Qué se ejecuta después de tu cambio?** Sigue el flujo desde tu cambio hasta que el resultado se vea (en pantalla o en el log): qué funciones corren después, si alguna dibuja, espera o escribe en la SD, y si el log sigue abierto. Si en ese camino algo puede colgarse, pon una marca antes de ese paso.
 
 ## Al concluir: tres columnas
 
@@ -72,6 +74,7 @@ La conclusión solo puede nombrar lo que cambió entre las pasadas, según la ta
 - **Prueba 26:** la pasada con el shader de `simple_tri` cambió a la vez el shader, la matriz (identidad frente a `Mtx_OrthoTilt`), los vértices (z −0,5 en recorte frente a z 0,5 en píxeles) y los atributos (2 fijos frente a 1). Se escribió "el shader del motor es el culpable": la conclusión correcta era "el shader o sus datos". La tabla de diferencias lo habría mostrado.
 - **Prueba 30 (análisis):** la tabla de "fases de carga" usó como milisegundos los números entre corchetes del log, que son la memoria en KB (`hechos-3ds.md`, T2), y el temporizador nuevo dividía los ticks entre 1000 (T1). Salieron 46 s cuando Alex midió casi 2 minutos, y la contradicción no se notó. **Si un dato tuyo contradice lo que Alex vio, para y busca el error antes de seguir.** También se concluyó que no hay demos mirando un log que solo resume los 12 primeros fotogramas (T3). Y en la propuesta de la 31 solo se respondió la pregunta 6 de la autocomprobación.
 - **Prueba 29 (análisis):** V1 (`r2` + `zw`) dio un log incompleto (no llegó al backend), pero se concluyó "lo que importa es `zw`, no de dónde lee el `dp4`". Con V1 sin resultado, lo único demostrado era: leer `intex` directo no basta (V0), y las dos cosas juntas funcionan (V2). Además, la carga tardaba unos 2 minutos: V1 pudo apagarse antes de llegar.
+- **Pruebas 33 y 34 (propuestas):** se planeó crear `I_StartFrame` en un archivo nuevo, cuando ya existía en `i_input.cpp` (pregunta 8), y se predijo "`[APT] exit`" en el log porque el gancho existe, sin leer cuándo se llama (pregunta 5; ver hechos S8).
 - **Pruebas 28 y 29:** en la 28, la variante que funcionó cambiaba tres cosas a la vez frente a la que se colgaba: la instrucción (`mov` en lugar de `dp4`), lo que leía (una constante en lugar de `texmat` y `r2`) y los componentes escritos (`.xyzw` en lugar de solo `.xy`). Se concluyó "es el `dp4`". El arreglo propuesto para la 29 también cambiaba dos cosas (leer `intex` directo y escribir además `outtc0.zw`) y atribuía el resultado solo a la primera. Es el mismo error que en la 26.
 - **Propuesta 27 (segunda versión):** las cuatro variantes cambiaban solo el shader, bien aislado, pero **todas con los datos del motor**: si todas se colgaban, no se habría sabido si era el código del shader o los datos (matriz, vértices, atributos). Faltaba la pasada que cambia solo los datos (el shader de `simple_tri` con los datos del motor). Además, una hipótesis decía "mul indirecto vía texmat", que no existe (`texmat` se usa en los `dp4`).
 - **Propuesta 27 (primera versión):** el shader intermedio leía el color de `v1`, pero ese camino pone la textura (0,0,0,0) en `v1`: el triángulo saldría negro aunque funcionara, y la pantalla habría engañado. Además dejaba hipótesis sin separar "para la 28".
