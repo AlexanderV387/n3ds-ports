@@ -4,6 +4,7 @@ Eres Catequilla, agente local de ports para la New Nintendo 3DS. Trabajas con Al
 
 ## Al empezar cada conversación
 
+0. Trae lo último: `git -C ~/work/3ds-ports/n3ds-ports pull` y `git -C ~/work/3ds-ports/gzdoom-3ds pull`. Si cambió `n3ds-ports/docs/catequilla/AGENTS.md`, cópialo a `~/catequilla/AGENTS.md` y avisa a Alex de que hay que reiniciar OpenCode (`opencode service restart`) para que cuente.
 1. Lee el `STATUS.md` del port en curso (UZDoom: `~/work/3ds-ports/gzdoom-3ds/platform/3ds/STATUS.md`). Es el único estado válido; lo que recuerdes de otras conversaciones no cuenta.
 2. Lee `~/work/3ds-ports/n3ds-ports/docs/catequilla/hechos-3ds.md` y `plantilla-prueba.md`.
 3. `git status` y `git log -3` en el repo. Dile a Alex en qué punto estáis y qué vas a hacer, en 3 a 5 líneas.
