@@ -52,6 +52,12 @@ Objetivo: que nuestra versión de Dolmexica se comporte como MUGEN 1.1, regla po
 | `p2defmul` de cada `SuperPause` se multiplica sobre quien está recibiendo golpe (movetype H) | Ikemen ("stacks… Mugen does the same") | se asignaba: el proyectil final de la 4200 (999) hacía 800 por golpe; en MUGEN ~1 | `3c3a204` | ídem: 97 de daño en MUGEN |
 | Un proyectil que sobrevive a un golpe tiene su pausa de golpe (`pausetime` del atacante); su `removetime` y `misstime` no corren mientras tanto | `Projectile.tick` de Ikemen | los proyectiles nunca pausaban: el de la 26000 de Kyouki duraba 100 ticks en vez de ~195 | `3c3a204` | ídem |
 | El KO de un jugador (vida 0) se aplica al empezar su siguiente actualización; hasta entonces `Alive` = 1; si está recibiendo golpe en un estado ajeno se queda en él | `actionFinish` de Ikemen | moría al instante (estado 5080): la 8904 de Kyouki no podía ponerlo en su 5175 (`enemy, alive = 1`) | `3c3a204` | ídem: rival en 5175 con vida 0 en MUGEN |
+| `GetHitVar(HitCount)`: golpes sin bloquear que ha recibido el jugador en el combo actual (empieza en 1 con un golpe fuera de combo); se conserva al cambiar de estado | `ghv.hitcount` de Ikemen | devolvía el `HitCount` del atacante (se pone a 0 en cada cambio de estado): el amortiguador de daño de Onslaught nunca se aplicaba (1200: 168, MUGEN 142); lo usan también Chun-Li, Harley, Mileena, Kitana y Psylocke | `c639bec` | registro de daño por ventanas de 30 ticks en un Kung Fu Man de 9999 (estado -2 propio que lee Onslaught con `enemy, var(n)` en su `DisplayToClipboard`) |
+| Un proyectil se dispara con el `AttackMulSet` de quien lo crea en ese momento | `parentAttackMul` de Ikemen | empezaba en 1: la onda de choque de Onslaught (13000) hacía 388 (MUGEN 296) | `261a65f` | ídem |
+| `TargetLifeAdd` no usa el multiplicador de ataque, solo la defensa del objetivo | `targetLifeAdd` de Ikemen ("always ignore the attack multiplier") | lo multiplicaba: el último golpe de las esferas de Onslaught (11200/21200) hacía 56 (MUGEN 62) | `58c2786` | ídem |
+| En entrenamiento los personajes no bajan de vida 1 (siguen `Alive`) | MUGEN 1.1 (modo Training desde el menú, trazado) | quedaban en 0: tras la 8900 de Kyouki el rival se quedaba para siempre en su 5175 y se iba de la pantalla | `58c2786` | traza en el modo entrenamiento de MUGEN 1.1 (vida 1, 5175 → 0 con control a los 20 ticks) |
+| `TargetState` cambia el número de estado al momento; los ajustes del statedef (tipo, física, anim, `ctrl`, `velset`...) se aplican cuando le toca actualizarse al objetivo, que no lo ejecuta en ese momento; de varios en un tick solo cuenta el último | `targetState` → `stateChange1` y `stateChange2` de Ikemen | se aplicaba y ejecutaba al instante: la 8902 de Kyouki manda al rival a 8903 y 8905 (`velset` -1, -22) y su 8904 a 5175; salía volando por arriba | `91cbb12` | ídem; agarre de Kung Fu Man igual antes y después |
+| Un golpe recibido sobre un cambio de estado pendiente (de `TargetState`) no lo deshace | `actionPrepare` de Ikemen (`stchtmp`: solo cambia `prevstateno`) | el golpe del tick anterior (aquí se aplican al empezar el siguiente) sacaba al rival del estado: la 12100 de Kyouki lo mete en 12300 (`NotHitBy`) y su proyectil lo sacaba cada tick | `70deb71` | 12000 de Kyouki: 5631 (MUGEN 5620) |
 | Un `.def` que termina en `clave =` sin nada más | — (fallo de lectura) | leía un byte fuera del archivo (Mileena) | prism `5e79918` | simulador con ASan |
 
 ## Comprobado igual que MUGEN (sin cambios)
@@ -73,6 +79,9 @@ Objetivo: que nuestra versión de Dolmexica se comporte como MUGEN 1.1, regla po
 |---|---|---|---|
 | Un helper `helpertype = player` empuja y es empujado como un jugador | `pushDetection` y `CSF_playerpush` de Ikemen | los helpers nunca empujan | afecta al helper de New Kyouki; hacerlo con prueba propia |
 | Guardia: los estados de guardia de `common1.cns` conservan el control; Ikemen empieza la guardia en la misma cadena que andar/saltar | `common1.cns`; `actionPrepare` de Ikemen | la guardia se resuelve aparte, tras los estados | revisar el momento exacto con capturas de MUGEN |
+
+| Onslaught 3300: en MUGEN el rival se queda quieto en x y Onslaught retrocede 3 en cada golpe (10 golpes, 227 de daño); aquí lo atraviesa (9 golpes, 220) | traza fotograma a fotograma en MUGEN 1.1 (Pause + ScrollLock) | Onslaught avanza 7 por tick | mecanismo sin identificar (no es la esquina: el rival está a 45 del borde) |
+| Onslaught 3200: 9835 en MUGEN, 9831 aquí | captura | 4 de diferencia | sin investigar |
 
 ## Sin verificar todavía
 
