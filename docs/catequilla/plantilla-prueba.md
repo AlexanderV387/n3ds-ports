@@ -54,11 +54,13 @@ La conclusión solo puede nombrar lo que cambió entre las pasadas, según la ta
 2. Comprueba que la línea `Test:` del log diga **NN**. Si no, el dueño probó otra versión: avísale antes de analizar nada.
 3. Compara con lo que la plantilla decía para cada hipótesis. Escribe cuál queda descartada y por qué, con las líneas del log.
 4. Si el resultado no encaja con ninguna hipótesis, dilo así. No fuerces una explicación.
+4b. **Una pasada con log incompleto no es un resultado**: no prueba ni descarta nada. Márcala como "a repetir" (y pregunta cuánto esperó Alex) antes de concluir. Si la conclusión depende de esa pasada, no hay conclusión todavía.
 5. Actualiza `platform/3ds/STATUS.md`: la tabla de pruebas, lo que ya sabemos y la pregunta siguiente.
 
 ## Errores que ya pasaron (no repetir)
 
 - **Prueba 26:** la pasada con el shader de `simple_tri` cambió a la vez el shader, la matriz (identidad frente a `Mtx_OrthoTilt`), los vértices (z −0,5 en recorte frente a z 0,5 en píxeles) y los atributos (2 fijos frente a 1). Se escribió "el shader del motor es el culpable": la conclusión correcta era "el shader o sus datos". La tabla de diferencias lo habría mostrado.
+- **Prueba 29 (análisis):** V1 (`r2` + `zw`) dio un log incompleto (no llegó al backend), pero se concluyó "lo que importa es `zw`, no de dónde lee el `dp4`". Con V1 sin resultado, lo único demostrado era: leer `intex` directo no basta (V0), y las dos cosas juntas funcionan (V2). Además, la carga tardaba unos 2 minutos: V1 pudo apagarse antes de llegar.
 - **Pruebas 28 y 29:** en la 28, la variante que funcionó cambiaba tres cosas a la vez frente a la que se colgaba: la instrucción (`mov` en lugar de `dp4`), lo que leía (una constante en lugar de `texmat` y `r2`) y los componentes escritos (`.xyzw` en lugar de solo `.xy`). Se concluyó "es el `dp4`". El arreglo propuesto para la 29 también cambiaba dos cosas (leer `intex` directo y escribir además `outtc0.zw`) y atribuía el resultado solo a la primera. Es el mismo error que en la 26.
 - **Propuesta 27 (segunda versión):** las cuatro variantes cambiaban solo el shader, bien aislado, pero **todas con los datos del motor**: si todas se colgaban, no se habría sabido si era el código del shader o los datos (matriz, vértices, atributos). Faltaba la pasada que cambia solo los datos (el shader de `simple_tri` con los datos del motor). Además, una hipótesis decía "mul indirecto vía texmat", que no existe (`texmat` se usa en los `dp4`).
 - **Propuesta 27 (primera versión):** el shader intermedio leía el color de `v1`, pero ese camino pone la textura (0,0,0,0) en `v1`: el triángulo saldría negro aunque funcionara, y la pantalla habría engañado. Además dejaba hipótesis sin separar "para la 28".
