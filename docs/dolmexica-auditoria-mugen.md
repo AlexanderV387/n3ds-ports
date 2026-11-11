@@ -44,9 +44,14 @@ Objetivo: que nuestra versión de Dolmexica se comporte como MUGEN 1.1, regla po
 | `LifeAdd` escalado por defensa se redondea (mínimo 1) | `lifeAdd` de Ikemen | se truncaba (Galactus 66, MUGEN 67) | `3fefe4a` | ídem |
 | Los valores de vida, ataque y defensa de los 18 personajes se leen como en sus archivos; la fórmula de daño es la de MUGEN | — | correcto | — | jab de Kung Fu Man: Felicia 23, Lei-lei 26, Galactus 67 en Dolmexica y en MUGEN 1.1 |
 | Un nuevo `Clsn1Default`/`Clsn2Default` dentro de una acción **reemplaza** las cajas por defecto; un `Clsn1`/`Clsn2` propio (también con 0 cajas) es el juego completo de ese cuadro | `readAnimation` de Ikemen | las cajas por defecto se sumaban: el rayo de Galactus conservaba una caja junto al puño y seguía golpeando de cerca (Kung Fu Man atrapado, ~430 de daño). Cambia 315 animaciones de 11 personajes (Onslaught 133, Kitana 110, Lei-lei 21, Psylocke 17, Wonder Woman 9, Chun-Li Neo 8, Apocalypse 7, Morrigan 6…) | prism `27df0a0` | rayo en MUGEN 1.1: 192 de daño y se libera a ~151 de distancia; simulador: 180 y ~140. Probado también con el empuje del helper "Push Check" desactivado en MUGEN: no influye |
+| `EnvColor` cubre toda la pantalla | MUGEN | en la 3DS solo cubría el centro 4:3: en las hipers de Felicia se veían el escenario y su retrato a los lados | `6996f59` | simulador con el margen de la 3DS (`-DDOLMEXICA_TEST_SIDE_MARGIN=80`, `N3DS_SIM_SIDE_MARGIN=40`) |
 | Un `.def` que termina en `clave =` sin nada más | — (fallo de lectura) | leía un byte fuera del archivo (Mileena) | prism `5e79918` | simulador con ASan |
 
 ## Comprobado igual que MUGEN (sin cambios)
+
+- **IA de New Kyouki** (CPU contra CPU, nivel 4, contando sus súper/hiper con una copia instrumentada): contra Galactus, Onslaught y Apocalypse elige lo mismo en MUGEN 1.1 y en Dolmexica; contra Apocalypse repite el súper 100001 (29 veces en MUGEN, 26 aquí), no le hace daño y pierde en los dos. Sus hipers (8900 y otras) piden condiciones (vida del rival <= 230, rival no de pie): es su IA, no el motor.
+- **Punto ciego de Galactus:** en MUGEN 1.1 Kung Fu Man pegado a él (entre el puño y el cuerpo) pasa 80 s perdiendo 8 de vida; en Dolmexica tampoco recibe daño. Quieto en su esquina, Galactus lo derrota en ~30 s en MUGEN y ~20 s aquí.
+
 
 - Giro automático en cada tic: solo el personaje base, en los estados 0, 11, 20 y 52 (este al acabar la animación), con control o con la ronda terminada (`Ikemen`, bucle de comandos).
 - Giro al cambiar de estado con control, de pie o agachado (regla no documentada de MUGEN, `changeStateEx` de Ikemen).
