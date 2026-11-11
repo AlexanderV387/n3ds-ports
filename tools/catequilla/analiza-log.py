@@ -72,9 +72,19 @@ def main():
     for b in build:
         print("  " + b.strip())
 
-    # Heap along the log.
-    heap = []
+    # Heap (and, from test 31 on, elapsed time) along the log.
+    # Old prefix: "[ 13226] text" (heap KB). New: "[T+  1234  heap=13226KB] text".
+    heap, timed = [], []
     for i, l in enumerate(lines):
+        m = re.match(r"\[T\+\s*(\d+)\s+heap=\s*(\d+)KB\]\s?(.*)", l)
+        if m:
+            heap.append((i + 1, int(m.group(2))))
+            timed.append((int(m.group(1)), m.group(3).strip(), i + 1))
+            continue
+        m = re.match(r"T\+(\d+) ms: (.*)", l)
+        if m:
+            timed.append((int(m.group(1)), m.group(2).strip(), i + 1))
+            continue
         m = re.match(r"\[\s*(\d+)\]", l)
         if m:
             heap.append((i + 1, int(m.group(1))))
@@ -82,6 +92,23 @@ def main():
         peak = max(heap, key=lambda x: x[1])
         print(f"Heap in use: start {heap[0][1]} KB, end {heap[-1][1]} KB, peak {peak[1]} KB (line {peak[0]})"
               f" of 72184 KB")
+
+    # Load phases: time between consecutive timed lines, slowest first.
+    if timed:
+        timed.sort(key=lambda t: (t[0], t[2]))
+        total = timed[-1][0]
+        phases = []
+        for (t0, txt0, n0), (t1, txt1, n1) in zip(timed, timed[1:]):
+            phases.append((t1 - t0, txt0, n0))
+        phases.sort(reverse=True)
+        print(f"-- load phases (from the T+ms marks; last mark at {total / 1000:.1f} s)")
+        print("   (each row: time from that line until the next timed line; [T+...] is ms, heap= is KB)")
+        for dt, txt, n in phases[:10]:
+            pct = 100.0 * dt / total if total else 0
+            print(f"  {dt / 1000:7.1f} s {pct:5.1f}%  line {n}: {txt[:90]}")
+        print("   If this total does not match what Alex timed on the console, find out why before concluding.")
+    else:
+        print("-- no T+ms marks: this log cannot tell times (the [N] prefix is heap KB, not time)")
 
     # Milestones.
     marks = ["Init complete", "V_Init", "C3D: backend ready", "StartScreen", "D_DoomLoop", "Exit:"]
@@ -101,6 +128,9 @@ def main():
     show("FATAL / errors", lambda l: "FATAL" in l or "FAILED" in l or "rror" in l)
     show("GPU HANG", lambda l: "GPU HANG" in l)
     show("[C3D] diagnostics", lambda l: l.startswith("[C3D]"), 60)
+    if any(re.match(r"\[C3D\] frame \d+:", l) for l in lines):
+        print("   NOTE: [C3D] frame summaries cover only the first 12 frames and draw details the first 8 draws:"
+              " anything later does not appear, so its absence proves nothing (hechos-3ds.md, T3).")
     show("odd lines (non-text bytes or glued markers)",
          lambda l: "�" in l or re.search(r"[\x00-\x08\x0b\x0c\x0e-\x1f]", l) or l.count("TEST") > 1, 10)
 

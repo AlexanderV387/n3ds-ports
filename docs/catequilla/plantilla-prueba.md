@@ -44,6 +44,16 @@ Responde por escrito, dentro de la plantilla. Si alguna respuesta es "no" o "no 
 6. **Si todas las variantes dieran el mismo resultado, ¿qué sabría?** Busca la hipótesis que tu diseño no puede descartar porque esa fila de la tabla **nunca cambia** en ninguna pasada (por ejemplo, los datos del dibujo). Si la hay, añade una pasada que la cambie a ella sola, o escribe que esta prueba no la distingue.
 7. **¿Puede Alex preparar cada pasada sin equivocarse?** Prefiere archivos de control vacíos con nombres distintos a archivos con contenido (un número dentro), que el Bloc de notas puede guardar con BOM o salto de línea.
 
+## Al concluir: tres columnas
+
+La conclusión de cada prueba va en `STATUS.md` en esta forma, sin excepciones:
+
+| Demostrado | Probable | Sin datos |
+|---|---|---|
+| Lo que las pasadas válidas muestran, cada punto con su log y su línea, o con lo que vio Alex | Lo que encaja pero no se aisló: va como hipótesis de la prueba siguiente | Lo que el log no puede mostrar o las pasadas inválidas: qué haría falta para saberlo |
+
+Antes de escribir algo en "Demostrado", comprueba: ¿qué pasada lo muestra, es válida, y cambió solo eso? Si dudas, va en "Probable".
+
 ## Al concluir: no digas más de lo que se cambió
 
 La conclusión solo puede nombrar lo que cambió entre las pasadas, según la tabla de diferencias. Si cambiaron cuatro cosas a la vez, la conclusión es "una de estas cuatro", no la que te parece más probable. Escribe la más probable como **hipótesis para la siguiente prueba**, no como hecho en "Lo que sabemos".
