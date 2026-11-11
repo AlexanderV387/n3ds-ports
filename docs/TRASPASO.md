@@ -318,7 +318,7 @@ En [`controles-fps.md`](controles-fps.md):
 
 Esta sección es para la próxima IA (Catequilla u otra). Junta el punto exacto donde quedó el trabajo con Claude, la metodología que funcionó, los prompts para arrancar y lo que hay que hacer primero.
 
-> **Actualización 10 nov. 2026:** UZDoom siguió con Catequilla hasta la prueba 24. El estado vigente está en `platform/3ds/STATUS.md` de la rama `uzdoom-3ds-test25` de gzdoom-3ds, y la forma de trabajar con Catequilla en [`catequilla/`](catequilla/) y [`catequilla-auditoria.md`](catequilla-auditoria.md). Lo de abajo describe el punto del 6 de noviembre.
+> **Actualización 11 nov. 2026:** UZDoom siguió con un agente local (Catequilla) desde la prueba 8. El estado vigente está en `platform/3ds/STATUS.md` de la rama `uzdoom-3ds-test25` de gzdoom-3ds. Lo de abajo describe el punto del 6 de noviembre.
 
 ### 11.1 Punto exacto donde quedó (6 de noviembre de 2026)
 

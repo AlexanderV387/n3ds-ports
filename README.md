@@ -26,8 +26,6 @@ Todo se prueba en una New 3DS real, con logs y mediciones, antes de publicarse.
 
 **Para retomar el proyecto:** [`docs/TRASPASO.md`](docs/TRASPASO.md) junta todo: repos, cómo compilar, estado de cada port, lo que está a medio hacer, el roadmap y lo aprendido.
 
-**Catequilla** (el agente local): instrucciones, hechos verificados de la 3DS, plantilla de prueba y puesta en marcha en [`docs/catequilla/`](docs/catequilla/); su auditoría en [`docs/catequilla-auditoria.md`](docs/catequilla-auditoria.md); el analizador de logs en `tools/catequilla/`.
-
 Cómo instalar cada port, las rutas en la SD, los archivos del juego que hacen falta y los que se han probado: [`docs/instalacion.md`](docs/instalacion.md).
 
 | Proyecto | Repo | Estado |
@@ -92,7 +90,6 @@ docs/
   controles-fps.md  estándar de controles para todos los FPS del proyecto
   instalacion.md    instalación, rutas y archivos probados de cada port
   TRASPASO.md       estado completo para retomar el proyecto en otro entorno
-  catequilla/       instrucciones, hechos y plantilla para el agente local
   devlog/           una entrada por avance importante
 hello-world/        primer programa: toolchain, bucle principal, entrada y FPS
 tools/3ds/          empaquetado .cia reutilizable para todos los ports
