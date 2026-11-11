@@ -66,6 +66,7 @@ Pendientes pequeños:
 - **Opción clásica** (apagada por defecto) para dejar las barras de estado en la pantalla de arriba, según el estándar: volver a ponerla en Blake Stone (se quitó en 1.2.0) y agregarla en Wolfenstein 3D, Crispy Doom y DSDA-Doom.
 - **Crispy Doom:** quitar la posición en medio de la barra de estado (solo arriba o abajo), como en Wolfenstein 3D.
 - **Duke Nukem 3D:** guardar partida es muy lento (sin investigar).
+- **Duke Nukem 3D, todos los episodios** (después de UZDoom): Alex tiene la edición 20th Anniversary World Tour de Steam. Probar sus datos (episodios 1 a 5) en el port y ver qué partes nuevas de World Tour soporta EDuke32 y cuáles no. Nunca se suben ni se empaquetan los datos del juego.
 - **Ideas de la comunidad (Reddit) para todos los FPS** (empezando por DSDA-Doom; ya en el [estándar de controles](docs/controles-fps.md)):
   - apuntar con el giroscopio (opcional);
   - un selector de mods con interfaz gráfica, no solo texto;
