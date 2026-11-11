@@ -43,6 +43,7 @@ Objetivo: que nuestra versión de Dolmexica se comporte como MUGEN 1.1, regla po
 | El daño de un golpe a un helper es **de su propia vida**, y solo si queda en un estado de recibir golpe | `lifeAdd` sobre el golpeado en Ikemen | iba a la vida del jugador raíz: los personajes cuyas piezas reciben y pasan el daño (Galactus) lo recibían doble | `3fefe4a` | ídem |
 | `LifeAdd` escalado por defensa se redondea (mínimo 1) | `lifeAdd` de Ikemen | se truncaba (Galactus 66, MUGEN 67) | `3fefe4a` | ídem |
 | Los valores de vida, ataque y defensa de los 18 personajes se leen como en sus archivos; la fórmula de daño es la de MUGEN | — | correcto | — | jab de Kung Fu Man: Felicia 23, Lei-lei 26, Galactus 67 en Dolmexica y en MUGEN 1.1 |
+| Un nuevo `Clsn1Default`/`Clsn2Default` dentro de una acción **reemplaza** las cajas por defecto; un `Clsn1`/`Clsn2` propio (también con 0 cajas) es el juego completo de ese cuadro | `readAnimation` de Ikemen | las cajas por defecto se sumaban: el rayo de Galactus conservaba una caja junto al puño y seguía golpeando de cerca (Kung Fu Man atrapado, ~430 de daño). Cambia 315 animaciones de 11 personajes (Onslaught 133, Kitana 110, Lei-lei 21, Psylocke 17, Wonder Woman 9, Chun-Li Neo 8, Apocalypse 7, Morrigan 6…) | prism `27df0a0` | rayo en MUGEN 1.1: 192 de daño y se libera a ~151 de distancia; simulador: 180 y ~140. Probado también con el empuje del helper "Push Check" desactivado en MUGEN: no influye |
 | Un `.def` que termina en `clave =` sin nada más | — (fallo de lectura) | leía un byte fuera del archivo (Mileena) | prism `5e79918` | simulador con ASan |
 
 ## Comprobado igual que MUGEN (sin cambios)
@@ -63,7 +64,6 @@ Objetivo: que nuestra versión de Dolmexica se comporte como MUGEN 1.1, regla po
 
 ## Sin verificar todavía
 
-- **Rayo de la mano de Galactus:** en MUGEN 1.1 tumba a Kung Fu Man tras unos 32 golpes (192); en Dolmexica lo deja atrapado en 5020 mientras dura (hasta ~110 golpes). En MUGEN algunos ciclos de golpe duran 3 tics y `HitShakeOver` se cumple; aquí siempre 2. Falta averiguar qué hace que MUGEN se salte ese tic.
 - El modo rápido de pruebas (`Makefile.linux`, sin dibujar) no detecta golpes de algunos helpers: medir con el simulador (`Makefile.sim`).
 
 - `StopSnd channel = -1`: Ikemen (como MUGEN) para solo los sonidos de los personajes; Dolmexica para todos, también el locutor. En la 3DS hace falta separar los canales libres de personajes y de sistema.
