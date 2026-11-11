@@ -30,6 +30,7 @@ Cuando se compruebe un hecho nuevo, se añade aquí con su fuente. Si uno result
 | D3 | Tipos de índice: `C3D_UNSIGNED_BYTE = 0`, `C3D_UNSIGNED_SHORT = 1`. No hay índices de 32 bits. | `citro3d/include/c3d/base.h` |
 | D4 | `AttrInfo` admite 12 atributos. `AttrInfo_AddLoader`/`AddFixed` devuelven el **número de atributo**, y la permutación del buffer lista números de atributo, no registros del shader. | `citro3d/source/attribs.c` |
 | D5 | En la permutación de un buffer, `0xC`–`0xF` son 4, 8, 12 y 16 bytes de relleno. | registros de la GPU en 3dbrew (`GPUREG_ATTRIBBUFFERi_CONFIG`); usado en `c3d_renderstate.cpp`. Pendiente de citar con enlace exacto |
+| D7 | **Texturas:** con la coordenada t del motor (v = 0 arriba), las filas de la imagen se suben al revés: la última fila de la imagen va en la primera fila de memoria de la textura. Subirlas en orden dejaba todo volteado de arriba abajo; el comentario original de `CreateTexture` decía lo contrario y estaba mal. | pruebas 31 (cuadrados sin textura en su sitio, texturas volteadas) y 32 (con `sy = h - 1 - y * h / ph` la imagen sale bien) |
 | D6 | **No verificado:** que el PICA200 se cuelgue si la permutación no cubre todo el stride. Es una hipótesis (prueba 17); no hay fuente. El relleno hasta el stride se añadió por si acaso. | — |
 
 ## Sistema y archivos
