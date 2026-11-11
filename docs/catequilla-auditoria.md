@@ -108,6 +108,8 @@ Al cerrar cada prueba se anota en `STATUS.md`. Después de la quinta se compara 
 
 | 29 (resultado) | 3 de 4 válidas (V1 con log incompleto) | **sí: primera pantalla de título del juego dibujada por la GPU** (V2: `dp4` con `intex` y `outtc0.zw` escrito) | 1 ronda | **aciertos:** buena separación de variables en el diseño. **Fallos:** usó la pasada inválida (V1) para concluir que basta escribir `zw`; no notó que V2 se había probado con el juego real |
 
+| 29 (V1 repetida) | sí, log completo (esperando la carga entera) | **igual que V2**: con `outtc0.zw` escrito funciona lea el `dp4` de `r2` o de `intex`; sin `zw` (V0) se cuelga | — | se avisa a Catequilla: ahora sí puede concluir que lo necesario es escribir `zw`, **siempre que V1 y V2 se probaran con el mismo dibujo** (si una fue el triángulo y otra el juego, cambian dos filas) |
+
 **Patrón que queda:** el proceso (plantilla, una sola compilación, commit, logs completos) ya funciona sin ayuda. Lo que todavía necesita revisión externa es **el control de variables**: comprobar que solo cambia lo que dice y no concluir más de lo que se cambió. Desde el 10 nov. la plantilla obliga a una tabla de diferencias y a cinco preguntas de autocomprobación (`plantilla-prueba.md`). Meta: que las próximas propuestas lleguen sin estos dos errores. Si se repiten, el siguiente paso es un revisor automático: una segunda conversación de Catequilla, con el modo de análisis (pensando), que solo revise la plantilla contra la autocomprobación antes de enseñársela a Alex.
 
 ## 9. Límite que no arreglan las herramientas
