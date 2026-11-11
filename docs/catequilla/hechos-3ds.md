@@ -52,6 +52,14 @@ Cuando se compruebe un hecho nuevo, se añade aquí con su fuente. Si uno result
 | C5 | En el PC de Alex el servidor de devkitPro responde `403` al instalador (`install-devkitpro-pacman`, también con `curl` y otro user agent). Se usa la imagen `devkitpro/devkitarm` de Docker Hub, que sí baja. | 10 nov. 2026 |
 | C4 | Compilar desde Windows (MSYS2) un repo que vive en WSL obliga a copiar a `C:` y a traducir rutas: fue la causa de las pruebas 17 y 19 inválidas. Se compila en Ubuntu (WSL). | sesión de las pruebas 17 a 24 |
 
+## Tiempo y log
+
+| # | Hecho | Fuente |
+|---|---|---|
+| T1 | `svcGetSystemTick()` cuenta a `SYSCLOCK_ARM11` = 268.111.856 por segundo (también en la New 3DS con la CPU acelerada). Milisegundos = ticks / (`SYSCLOCK_ARM11` / 1000). **Dividir entre 1000 no da milisegundos**: da unas 268 veces más. | `libctru/include/3ds/os.h` (`SYSCLOCK_ARM9 * 2`); ya usado en `i_system_3ds.cpp` (`CalculateCPUSpeed`) |
+| T2 | El número entre corchetes al principio de las líneas del log (`[ 13226] W_Init…`) es **la memoria del heap en uso, en KB**, no el tiempo. | `i_system_3ds.cpp`, `I_PrintStr` |
+| T3 | Los resúmenes `[C3D] frame N` cubren solo los 12 primeros fotogramas y el detalle `[C3D] draw` solo los 8 primeros dibujos: lo que pase después no sale en el log. Que no aparezca algo después de eso no demuestra que no ocurra. | `c3d_diag.cpp` (`SummaryFrames`, `DetailDraws`) |
+
 ## Memoria de la New 3DS
 
 | # | Hecho | Fuente |
