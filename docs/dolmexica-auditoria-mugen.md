@@ -4,6 +4,8 @@ Objetivo: que nuestra versión de Dolmexica se comporte como MUGEN 1.1, regla po
 
 ## Método
 
+- MUGEN 1.1 de comparación en 4:3 (`GameWidth = 960`, `GameHeight = 720`), como la pantalla de la 3DS: en 16:9 lo que sale desde el borde de la pantalla (`postype = back`) sale de otro sitio.
+
 - **Lista de comprobación:** las notas del código de Ikemen GO que describen un comportamiento de MUGEN ("In Mugen...", "Mugen behavior..."), unas 300 en `char.go`, `bytecode.go`, `system.go`, `stage.go`, `compiler.go`. Ikemen está hecho para imitar a MUGEN y anota cada rareza que copia. Se descargan de raw.githubusercontent.com/ikemen-engine/Ikemen-GO.
 - **Referencias directas:** la documentación de MUGEN 1.1 (`docs/sctrls.html`, `cns.html`, `trigger.html`), su `common1.cns`, y MUGEN 1.1 ejecutándose con Wine para comparar capturas (`dolmexicainfinite/tools/mugen-shots.sh`).
 - **Cada cambio con una prueba** en PC (`Makefile.linux`) o en el simulador de la 3DS (`Makefile.sim`, con AddressSanitizer), y con la prueba de cierres de los 18 personajes.
@@ -58,6 +60,8 @@ Objetivo: que nuestra versión de Dolmexica se comporte como MUGEN 1.1, regla po
 | En entrenamiento los personajes no bajan de vida 1 (siguen `Alive`) | MUGEN 1.1 (modo Training desde el menú, trazado) | quedaban en 0: tras la 8900 de Kyouki el rival se quedaba para siempre en su 5175 y se iba de la pantalla | `58c2786` | traza en el modo entrenamiento de MUGEN 1.1 (vida 1, 5175 → 0 con control a los 20 ticks) |
 | `TargetState` cambia el número de estado al momento; los ajustes del statedef (tipo, física, anim, `ctrl`, `velset`...) se aplican cuando le toca actualizarse al objetivo, que no lo ejecuta en ese momento; de varios en un tick solo cuenta el último | `targetState` → `stateChange1` y `stateChange2` de Ikemen | se aplicaba y ejecutaba al instante: la 8902 de Kyouki manda al rival a 8903 y 8905 (`velset` -1, -22) y su 8904 a 5175; salía volando por arriba | `91cbb12` | ídem; agarre de Kung Fu Man igual antes y después |
 | Un golpe recibido sobre un cambio de estado pendiente (de `TargetState`) no lo deshace | `actionPrepare` de Ikemen (`stchtmp`: solo cambia `prevstateno`) | el golpe del tick anterior (aquí se aplican al empezar el siguiente) sacaba al rival del estado: la 12100 de Kyouki lo mete en 12300 (`NotHitBy`) y su proyectil lo sacaba cada tick | `70deb71` | 12000 de Kyouki: 5631 (MUGEN 5620) |
+| Con `PlayerPush 0` en un solo jugador, el otro se aparta igual (la mitad del solape por tick) y el primero no se mueve; con los dos a 0 se atraviesan | MUGEN 1.1 trazado (Ikemen exige que ninguno lo tenga a 0) | no empujaba en cuanto uno lo desactivaba: Onslaught (`PlayerPush 0` en su -2) no apartaba a Kung Fu Man | `2065d85` | paso a paso en MUGEN (Pause + ScrollLock): Kung Fu Man 81→86→89→90→91; con `PlayerPush 0` también en él, se queda en 70 |
+| El ancho para empujar y para los bordes es el de `size` (suelo o aire) también al atacar; `attack.width` no se usa | MUGEN 1.1 trazado; Ikemen no lo usa | al atacar se usaba `attack.width` (Onslaught: 4): la 3300 de Onslaught daba 9 golpes (MUGEN 10) | `2065d85` | 3300: 9772 como MUGEN |
 | Un `.def` que termina en `clave =` sin nada más | — (fallo de lectura) | leía un byte fuera del archivo (Mileena) | prism `5e79918` | simulador con ASan |
 
 ## Comprobado igual que MUGEN (sin cambios)
@@ -80,8 +84,8 @@ Objetivo: que nuestra versión de Dolmexica se comporte como MUGEN 1.1, regla po
 | Un helper `helpertype = player` empuja y es empujado como un jugador | `pushDetection` y `CSF_playerpush` de Ikemen | los helpers nunca empujan | afecta al helper de New Kyouki; hacerlo con prueba propia |
 | Guardia: los estados de guardia de `common1.cns` conservan el control; Ikemen empieza la guardia en la misma cadena que andar/saltar | `common1.cns`; `actionPrepare` de Ikemen | la guardia se resuelve aparte, tras los estados | revisar el momento exacto con capturas de MUGEN |
 
-| Onslaught 3300: en MUGEN el rival se queda quieto en x y Onslaught retrocede 3 en cada golpe (10 golpes, 227 de daño); aquí lo atraviesa (9 golpes, 220) | traza fotograma a fotograma en MUGEN 1.1 (Pause + ScrollLock) | Onslaught avanza 7 por tick | mecanismo sin identificar (no es la esquina: el rival está a 45 del borde) |
-| Onslaught 3200: 9835 en MUGEN, 9831 aquí | captura | 4 de diferencia | sin investigar |
+| Cámara con un jugador acorralado y el otro empujado hacia atrás: en MUGEN (4:3) el rival queda en x 100 y Onslaught llega a -120; aquí 112 y -100 | traza paso a paso en MUGEN 1.1 (3200 de Onslaught) | Onslaught 3200 9799 (MUGEN 9835) y 11100 9847 (MUGEN 9779): los misiles salen desde el borde de la pantalla | fase de escenarios y cámara (`tension`, bordes) |
+| `P2BodyDist X` negativo cuando se solapan | `p2BodyDistX` de Ikemen | siempre positivo (`fabs`) | revisar con capturas de MUGEN antes de cambiarlo (lo usan IAs) |
 
 ## Sin verificar todavía
 
