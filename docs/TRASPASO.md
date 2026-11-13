@@ -157,7 +157,8 @@ En [`controles-fps.md`](controles-fps.md):
   - proyectiles de helpers destruidos;
   - la bandera de guardia;
   - **el empuje entre personajes (prueba 72):** se empujan si sus cajas de tamaño se solapan también en altura (cada una con su `height`) y sus Clsn2 se tocan, como `pushDetection` de Ikemen. Un personaje con helpers pegados (`BindToParent`) ya empuja; solo un agarre (el rival atado) lo apaga. Antes, Kung Fu Man le saltaba por encima a Apocalypse (`height = 300`), Apocalypse se giraba al empezar a caminar (regla no documentada de MUGEN, ver `changeStateEx` de Ikemen) y su torso (el propio personaje, animación 0) se reflejaba mientras sus partes (helpers sin `facing`) no: "se desarmaba". Comprobado con `JumpedOver` y en MUGEN 1.1 con Wine (allí Kung Fu Man no logra pasar).
-- **Pendientes concretos:**
+- **Decisión del dueño (13 nov. 2026): borrón y cuenta nueva de los pendientes antiguos de abajo (la mayoría resueltos); solo se trabaja en los personajes HD** (Chun Li HD: corrupción con la memoria lineal agotada, diagnóstico de las pruebas 97 a 100).
+- **Pendientes concretos (antiguos, archivados):**
   - **Galactus:** la mano desaparece después de "continuar" (arcade). No se reproduce en PC ni en el simulador con Kung Fu Man (el puño, helper 4, se vuelve a crear y se dibuja). El dueño cree que jugaba con New Kyouki: probar con él (memoria de texturas).
   - **Onslaught:** los 4 orbes eléctricos no conectan.
   - **Abyss se ve invisible:** el `abyss.sff` de la SD del dueño está cortado (786 KB de 9.314.266). Hay que volver a copiarlo. El motor ya avisa de SFF cortados.
